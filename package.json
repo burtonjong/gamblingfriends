@@ -6,11 +6,11 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "prepare": "husky install"
   },
   "dependencies": {
     "@trivago/prettier-plugin-sort-imports": "^4.3.0",
-    "lint-staged": "^12.3.2",
     "next": "14.2.3",
     "prettier-plugin-tailwindcss": "^0.0.0-insiders.d539a72",
     "react": "^18",
@@ -23,9 +23,15 @@
     "eslint": "^8",
     "eslint-config-next": "14.2.3",
     "eslint-config-prettier": "^9.1.0",
+    "husky": "^9.0.11",
+    "lint-staged": "^15.2.5",
     "postcss": "^8",
     "prettier": "3.3.1",
     "tailwindcss": "^3.4.1",
     "typescript": "^5"
+  },
+  "lint-staged": {
+    "*.js": "eslint --cache --fix",
+    "*.{js,css,md}": "prettier --write"
   }
 }
