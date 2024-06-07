@@ -1,4 +1,3 @@
-import Image from "next/image";
 import MainPlanner from "@/components/planner/MainPlanner";
 
 export default function Home() {

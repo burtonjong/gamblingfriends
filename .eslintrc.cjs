@@ -1,9 +1,7 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 const path = require("path");
 const prettierConfig = require("./prettier.config.cjs");
-
 const project = path.join(__dirname, "./tsconfig.json");
-const backend = path.join(__dirname, "./amplify/tsconfig.json");
 
 /** @type {import("eslint").Linter.Config} */
 const config = {
@@ -18,13 +16,10 @@ const config = {
         // "plugin:@typescript-eslint/recommended-requiring-type-checking",
         "plugin:promise/recommended",
       ],
-      files: [
-        "./src/**/*.ts",
-        "./src/**/*.tsx",
-      ],
+      files: ["./src/**/*.ts", "./src/**/*.tsx"],
       parserOptions: {
         project: {
-          include: [project, backend],
+          include: [project],
         },
       },
       rules: {

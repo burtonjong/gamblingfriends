@@ -1,4 +1,3 @@
-import Image from "next/image";
 import MainSpreadsheet from "@/components/spreadsheet/MainSpreadsheet";
 
 export default function Home() {
