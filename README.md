@@ -1,5 +1,7 @@
 This is a [Next.js](https://nextjs.org/) project
 
+A preview deployment can be found at: spreadsheet-planner.vercel.app
+
 ## Note
 
 Please don't push directly on main, create a branch and then push to that branch and create a PR when it's ready to be reviewed
