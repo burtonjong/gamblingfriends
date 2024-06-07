@@ -1,5 +1,19 @@
 This is a [Next.js](https://nextjs.org/) project 
 
+## Note
+
+Please don't push directly on main, create a branch and then push to that branch and create a PR when it's ready to be reviewed
+
+```bash
+git branch new-branch
+
+git checkout new-branch
+
+or
+
+git checkout -b new-branch (to automatically checkout to that branch)
+```
+
 ## Getting Started
 
 First, run the development server:
@@ -10,6 +24,8 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
+
+## Documentation
 
 Next.js documentation (used for rendering, routing, etc):
 
