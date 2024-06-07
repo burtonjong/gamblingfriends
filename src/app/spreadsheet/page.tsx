@@ -1,9 +1,10 @@
 import Image from "next/image";
+import MainSpreadsheet from "@/components/spreadsheet/MainSpreadsheet";
 
 export default function Home() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="text-2xl flex">Home Page for now</div>
+      <MainSpreadsheet />
     </main>
   );
 }
