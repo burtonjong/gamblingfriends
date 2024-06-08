@@ -21,6 +21,10 @@ git checkout -b new-branch (to automatically checkout to that branch)
 First, run the development server:
 
 ```bash
+npm i
+
+then
+
 npm run dev
 ```
 
