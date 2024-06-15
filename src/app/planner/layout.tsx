@@ -3,5 +3,5 @@ export default function PlannerLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return <div>{children}</div>;
+  return <>{children}</>;
 }
