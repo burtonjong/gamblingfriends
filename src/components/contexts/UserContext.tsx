@@ -23,6 +23,7 @@ export interface IUser {
   lastName?: string;
   email?: string;
   populated: boolean;
+  signedIn?: boolean;
 }
 
 interface IUserReturn {
@@ -45,6 +46,7 @@ export function UserContextProvider({ children }: Props) {
     async function currentAuthenticatedUser() {
       try {
         const user = await fetchAuthSession();
+        console.log(user);
         if (!user.userSub) {
           throw new Error("No user");
         }
