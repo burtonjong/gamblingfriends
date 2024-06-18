@@ -1,3 +1,4 @@
+import EventClock from "@/components/homepage/EventClock";
 import Podium from "@/components/homepage/Podium";
 
 export default function Home() {
@@ -6,7 +7,9 @@ export default function Home() {
       <div>
         <Podium />
       </div>
-      <div>Replace with anthony component</div>
+      <div>
+        <EventClock />
+      </div>
     </div>
   );
 }
