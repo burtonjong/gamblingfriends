@@ -6,7 +6,7 @@ export default function Home() {
       <div>
         <Podium />
       </div>
-      <div>Replace with anthony component</div>
+      <div>Replace with anthony components</div>
     </div>
   );
 }
