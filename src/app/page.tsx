@@ -9,11 +9,11 @@ export default function Home() {
   const dateTimeAfterThreeDays = NOW_IN_MS + THREE_DAYS_IN_MS;
 
   return (
-    <div className="flex min-h-screen w-full flex-row items-center justify-around p-12">
-      <div>
+    <div className="flex min-h-screen w-full flex-row items-center justify-around p-10">
+      <div className="">
         <Podium />
       </div>
-      <div>
+      <div className="">
         <CountdownTimer targetDate={dateTimeAfterThreeDays} />
       </div>
     </div>
