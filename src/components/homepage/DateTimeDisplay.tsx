@@ -13,7 +13,7 @@ const DateTimeDisplay: React.FC<DateTimeDisplayProps> = ({
 }) => {
   return (
     <div className={isDanger ? "countdown danger" : "countdown"}>
-      <div className="flex space-x-2 font-bold">
+      <div className="flex flex-col items-center justify-center font-bold">
         <p className="">{value}</p>
         <span className="">{type}</span>
       </div>

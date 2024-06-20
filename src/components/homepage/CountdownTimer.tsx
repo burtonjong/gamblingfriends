@@ -33,19 +33,24 @@ const ShowCounter: React.FC<ShowCounterProps> = ({
   return (
     <div className="min-h-[560px] min-w-[550px] rounded-md bg-slate-500 py-20">
       <div className="flex justify-center py-10">
-        <h1 className="text-3xl font-bold text-white">Countdown</h1>
+        <h1 className="text-3xl font-bold text-white">
+          Time until next Poker Event
+        </h1>
       </div>
       <div className="flex justify-center space-x-5 py-10 text-xl text-white">
-        <div>
+        <div className="">
           <DateTimeDisplay value={days} type={"Days"} isDanger={days <= 3} />
         </div>
-        <div>
+        <p>:</p>
+        <div className="">
           <DateTimeDisplay value={hours} type={"Hours"} isDanger={false} />
         </div>
-        <div>
+        <p>:</p>
+        <div className="">
           <DateTimeDisplay value={minutes} type={"Mins"} isDanger={false} />
         </div>
-        <div>
+        <p>:</p>
+        <div className="">
           <DateTimeDisplay value={seconds} type={"Seconds"} isDanger={false} />
         </div>
       </div>
