@@ -1,8 +1,12 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 
-import "@/app/globals.css";
-import MainLayout from "@/components/layouts/MainLayout";
+import Footer from "@/components/Footer";
+import Header from "@/components/Header";
+import Auth from "@/components/contexts/Auth";
+import { isAuthenticated } from "@/components/contexts/amplifyUtils";
+
+import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -11,7 +15,7 @@ export const metadata: Metadata = {
   description: "Made for wins/losses and planning sessions",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
@@ -19,7 +23,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <MainLayout>{children}</MainLayout>
+        <Header isSignedIn={await isAuthenticated()} />
+        <Auth>{children}</Auth>
+        <Footer />
       </body>
     </html>
   );

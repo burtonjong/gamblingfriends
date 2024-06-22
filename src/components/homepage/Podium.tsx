@@ -8,7 +8,7 @@ const people = {
     daysAttended: 2,
   },
   Burton: {
-    profit: 25,
+    profit: 15,
     daysAttended: 5,
   },
   Matthew: {
