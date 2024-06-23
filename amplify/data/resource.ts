@@ -1,3 +1,5 @@
+import { Session } from "inspector";
+
 import { type ClientSchema, a, defineData } from "@aws-amplify/backend";
 
 import { postConfirmation } from "../auth/post-confirmation/resource";
@@ -15,8 +17,15 @@ const schema = a
         email: a.string(),
         firstName: a.string(),
         lastName: a.string(),
+        totalEarnings: a.float(),
+        //SessionsAttended: a.children({
       })
       .authorization((allow) => [allow.owner()]),
+    /*SessionsAttended: a.model({
+      session: a.string(),
+      user: a.string(),
+      earnings: a.float(),
+    }),*/
   })
   .authorization((allow) => [allow.resource(postConfirmation)]);
 
