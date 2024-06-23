@@ -54,13 +54,13 @@ export default function Podium() {
       <h1 className="text-3xl font-bold text-white">Leaderboard</h1>
       <button
         onClick={() => setRankType(true)}
-        className={`rounded-bl-lg rounded-tl-lg border-2 border-slate-800 ${rankType ? "bg-slate-800 text-white" : "bg-white"} p-1 font-bold`}
+        className={`rounded-l-lg border-2 border-slate-800 ${rankType ? "bg-slate-800 text-white" : "bg-white"} p-1 font-bold`}
       >
         Total
       </button>
       <button
         onClick={() => setRankType(false)}
-        className={`rounded-br-lg rounded-tr-lg border-2 border-slate-800 ${!rankType ? "bg-slate-800 text-white" : "bg-white"} p-1 font-bold`}
+        className={`rounded-r-lg border-2 border-slate-800 ${!rankType ? "bg-slate-800 text-white" : "bg-white"} p-1 font-bold`}
       >
         Average
       </button>
@@ -78,7 +78,7 @@ export default function Podium() {
             className="m-5 flex items-center justify-between rounded-lg bg-slate-200 p-2"
           >
             <div
-              className={`h-10 w-10 ${index >= 3 ? "bg-slate-400" : index === 2 ? "bg-yellow-700" : index === 1 ? "bg-gray-400" : "bg-yellow-400"} mr-4 flex items-center justify-center rounded-full font-bold text-white`}
+              className={`size-10 ${index >= 3 ? "bg-slate-400" : index === 2 ? "bg-yellow-700" : index === 1 ? "bg-gray-400" : "bg-yellow-400"} mr-4 flex items-center justify-center rounded-full font-bold text-white`}
             >
               {index + 1}
             </div>

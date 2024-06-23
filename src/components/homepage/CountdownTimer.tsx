@@ -1,16 +1,8 @@
-/* eslint-disable react/prop-types */
 "use client";
 
 import { useCountdown } from "../hooks/useCounter";
 import DateTimeDisplay from "./DateTimeDisplay";
 
-/* eslint-disable react/prop-types */
-
-/* eslint-disable react/prop-types */
-
-/* eslint-disable react/prop-types */
-
-/* eslint-disable react/prop-types */
 interface ShowCounterProps {
   days: number;
   hours: number;
@@ -18,7 +10,7 @@ interface ShowCounterProps {
   seconds: number;
 }
 
-const ExpiredNotice: React.FC = () => {
+const ExpiredNotice = () => {
   return (
     <div className="flex min-h-[560px] min-w-[550px] items-center justify-center rounded-md bg-slate-500 font-bold text-white">
       <p>(づ ◕‿◕ )づ</p>
@@ -28,12 +20,7 @@ const ExpiredNotice: React.FC = () => {
   );
 };
 
-const ShowCounter: React.FC<ShowCounterProps> = ({
-  days,
-  hours,
-  minutes,
-  seconds,
-}) => {
+const ShowCounter = ({ days, hours, minutes, seconds }: ShowCounterProps) => {
   if (days === undefined) {
     return null;
   }
@@ -69,7 +56,7 @@ interface CountdownTimerProps {
   targetDate: Date;
 }
 
-const CountdownTimer: React.FC<CountdownTimerProps> = ({ targetDate }) => {
+const CountdownTimer = ({ targetDate }: CountdownTimerProps) => {
   const [days, hours, minutes, seconds] = useCountdown(targetDate);
 
   if (days + hours + minutes + seconds <= 0) {
