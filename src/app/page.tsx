@@ -6,7 +6,7 @@ export default function Home() {
 
   const NOW_IN_MS = new Date().getTime();
 
-  const dateTimeAfterThreeDays = NOW_IN_MS + THREE_DAYS_IN_MS;
+  const dateTimeAfterThreeDays = new Date(NOW_IN_MS + THREE_DAYS_IN_MS);
 
   return (
     <div className="flex min-h-screen w-full flex-row items-center justify-around p-10">
