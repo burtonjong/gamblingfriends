@@ -25,6 +25,7 @@ const schema = a
       session: a.string(),
       user: a.string(),
       earnings: a.float(),
+      beep
     }),*/
   })
   .authorization((allow) => [allow.resource(postConfirmation)]);
