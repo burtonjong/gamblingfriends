@@ -18,15 +18,15 @@ const schema = a
         firstName: a.string(),
         lastName: a.string(),
         totalEarnings: a.float(),
-        //SessionsAttended: a.children({
+        userId: a.id(),
+        sessionsAttended: a.belongsTo("SessionAttended", "userId"),
       })
       .authorization((allow) => [allow.owner()]),
-    /*SessionsAttended: a.model({
-      session: a.string(),
-      user: a.string(),
-      earnings: a.float(),
-      beep
-    }),*/
+    SessionsAttended: a.model({
+      numberOfSessions: a.integer(),
+      earningsThatSession: a.float(),
+      date: a.hasMany("User", "userId"),
+    }),
   })
   .authorization((allow) => [allow.resource(postConfirmation)]);
 
