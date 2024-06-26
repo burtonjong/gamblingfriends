@@ -1,3 +1,6 @@
+import { identifyUser } from "aws-amplify/analytics";
+import { Session } from "inspector";
+
 import { type ClientSchema, a, defineData } from "@aws-amplify/backend";
 
 import { postConfirmation } from "../auth/post-confirmation/resource";
@@ -12,11 +15,28 @@ const schema = a
   .schema({
     User: a
       .model({
-        email: a.string(),
-        firstName: a.string(),
-        lastName: a.string(),
+        id: a.id().required(),
+        email: a.string().required(),
+        firstName: a.string().required(),
+        lastName: a.string().required(),
+        totalEarnings: a.float(),
+        sessionsAttended: a.hasMany("SessionAttended", "sessionAttendedId"),
       })
-      .authorization((allow) => [allow.owner()]),
+      .authorization((allow) => [
+        allow.group("Guest").to(["read"]),
+        allow.group("Admin").to(["read", "update", "delete"]),
+      ]),
+    SessionsAttended: a
+      .model({
+        id: a.id().required(),
+        sessionAttendedId: a.id().required(),
+        earningsThatSession: a.float(),
+        date: a.belongsTo("User", "sessionAttendedId"),
+      })
+      .authorization((allow) => [
+        allow.group("Guest").to(["read"]),
+        allow.group("Admin").to(["read", "update", "delete"]),
+      ]),
   })
   .authorization((allow) => [allow.resource(postConfirmation)]);
 
