@@ -20,11 +20,12 @@ const schema = a
         firstName: a.string().required(),
         lastName: a.string().required(),
         totalEarnings: a.float(),
-        sessionsAttended: a.hasMany("SessionAttended", "sessionAttendedId"),
+        sessionsAttended: a.hasMany("SessionsAttended", "sessionAttendedId"),
       })
       .authorization((allow) => [
-        allow.group("Guest").to(["read"]),
-        allow.group("Admin").to(["read", "update", "delete"]),
+        // allow.group("Guest").to(["read"]),
+        // allow.group("Admin").to(["read", "update", "delete"]),
+        allow.authenticated(),
       ]),
     SessionsAttended: a
       .model({
@@ -34,8 +35,9 @@ const schema = a
         date: a.belongsTo("User", "sessionAttendedId"),
       })
       .authorization((allow) => [
-        allow.group("Guest").to(["read"]),
-        allow.group("Admin").to(["read", "update", "delete"]),
+        // allow.group("Guest").to(["read"]),
+        // allow.group("Admin").to(["read", "update", "delete"]),
+        allow.authenticated(),
       ]),
   })
   .authorization((allow) => [allow.resource(postConfirmation)]);
