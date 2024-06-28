@@ -16,7 +16,7 @@ export async function isAuthenticated() {
   try {
     const currentUser = await runWithAmplifyServerContext({
       nextServerContext: { cookies },
-      operation: (contextSpec) => fetchAuthSession(contextSpec),
+      operation: (contextSpec: any) => fetchAuthSession(contextSpec),
     });
 
     return !!currentUser;

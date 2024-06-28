@@ -12,8 +12,8 @@ interface Props {
 }
 
 export enum UserType {
-  Admin = "Admin",
-  Guest = "Guest",
+  AdminUser = "AdminUser",
+  GuestUser = "GuestUser",
 }
 
 export interface IUser {
@@ -38,7 +38,7 @@ export const UserContext = createContext<IUserReturn>({} as IUserReturn);
 export function UserContextProvider({ children }: Props) {
   const [currentUser, setCurrentUser] = useState<IUser>({
     username: "",
-    type: UserType.Guest,
+    type: UserType.GuestUser,
     populated: false,
   });
   // TO DO load other user info from table
@@ -85,7 +85,7 @@ export function UserContextProvider({ children }: Props) {
         if (String(err).includes("No user")) {
           setCurrentUser({
             username: "",
-            type: UserType.Guest,
+            type: UserType.GuestUser,
             populated: true,
           });
           console.info("Not Logged in");

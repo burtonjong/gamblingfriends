@@ -1,9 +1,6 @@
-import { identifyUser } from "aws-amplify/analytics";
-import { Session } from "inspector";
-
 import { type ClientSchema, a, defineData } from "@aws-amplify/backend";
 
-import { postConfirmation } from "../auth/post-confirmation/resource";
+import { preSignUp } from "../auth/pre-sign-up/resource";
 
 /*== STEP 1 ===============================================================
 The section below creates a Todo database table with a "content" field. Try
@@ -19,13 +16,13 @@ const schema = a
         email: a.string().required(),
         firstName: a.string().required(),
         lastName: a.string().required(),
+        role: a.string().default("GuestUser"),
         totalEarnings: a.float(),
         sessionsAttended: a.hasMany("SessionsAttended", "sessionAttendedId"),
       })
       .authorization((allow) => [
-        // allow.group("Guest").to(["read"]),
-        // allow.group("Admin").to(["read", "update", "delete"]),
-        allow.authenticated(),
+        allow.group("GuestUser").to(["read"]),
+        allow.group("AdminUser").to(["read", "update", "delete"]),
       ]),
     SessionsAttended: a
       .model({
@@ -35,12 +32,11 @@ const schema = a
         date: a.belongsTo("User", "sessionAttendedId"),
       })
       .authorization((allow) => [
-        // allow.group("Guest").to(["read"]),
-        // allow.group("Admin").to(["read", "update", "delete"]),
-        allow.authenticated(),
+        allow.group("GuestUser").to(["read"]),
+        allow.group("AdminUser").to(["read", "update", "delete"]),
       ]),
   })
-  .authorization((allow) => [allow.resource(postConfirmation)]);
+  .authorization((allow) => [allow.resource(preSignUp).to(["mutate"])]);
 
 export type Schema = ClientSchema<typeof schema>;
 
