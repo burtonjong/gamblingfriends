@@ -1,9 +1,4 @@
-import { identifyUser } from "aws-amplify/analytics";
-import { Session } from "inspector";
-
 import { type ClientSchema, a, defineData } from "@aws-amplify/backend";
-
-import { postConfirmation } from "../auth/post-confirmation/resource";
 
 /*== STEP 1 ===============================================================
 The section below creates a Todo database table with a "content" field. Try
@@ -11,36 +6,35 @@ adding a new "isDone" field as a boolean. The authorization rule below
 specifies that any unauthenticated user can "create", "read", "update", 
 and "delete" any "Todo" records.
 =========================================================================*/
-const schema = a
-  .schema({
-    User: a
-      .model({
-        id: a.id().required(),
-        email: a.string().required(),
-        firstName: a.string().required(),
-        lastName: a.string().required(),
-        totalEarnings: a.float(),
-        sessionsAttended: a.hasMany("SessionsAttended", "sessionAttendedId"),
-      })
-      .authorization((allow) => [
-        // allow.group("Guest").to(["read"]),
-        // allow.group("Admin").to(["read", "update", "delete"]),
-        allow.authenticated(),
-      ]),
-    SessionsAttended: a
-      .model({
-        id: a.id().required(),
-        sessionAttendedId: a.id().required(),
-        earningsThatSession: a.float(),
-        date: a.belongsTo("User", "sessionAttendedId"),
-      })
-      .authorization((allow) => [
-        // allow.group("Guest").to(["read"]),
-        // allow.group("Admin").to(["read", "update", "delete"]),
-        allow.authenticated(),
-      ]),
-  })
-  .authorization((allow) => [allow.resource(postConfirmation)]);
+const schema = a.schema({
+  User: a
+    .model({
+      id: a.id().required(),
+      email: a.string().required(),
+      firstName: a.string().required(),
+      lastName: a.string().required(),
+      role: a.string().default("GuestUser"),
+      totalEarnings: a.float(),
+      sessionsAttended: a.hasMany("SessionsAttended", "sessionAttendedId"),
+    })
+    .authorization((allow) => [
+      // allow.group("Guest").to(["read"]),
+      // allow.group("Admin").to(["read", "update", "delete"]),
+      allow.authenticated(),
+    ]),
+  SessionsAttended: a
+    .model({
+      id: a.id().required(),
+      sessionAttendedId: a.id().required(),
+      earningsThatSession: a.float(),
+      date: a.belongsTo("User", "sessionAttendedId"),
+    })
+    .authorization((allow) => [
+      // allow.group("Guest").to(["read"]),
+      // allow.group("Admin").to(["read", "update", "delete"]),
+      allow.authenticated(),
+    ]),
+});
 
 export type Schema = ClientSchema<typeof schema>;
 

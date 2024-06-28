@@ -10,7 +10,9 @@ export const auth = defineAuth({
   loginWith: {
     email: true,
   },
+  groups: ["AdminUser", "GuestUser"],
   triggers: {
     postConfirmation,
   },
+  access: (allow) => [allow.resource(postConfirmation).to(["addUserToGroup"])],
 });
