@@ -12,11 +12,13 @@
   "dependencies": {
     "@aws-amplify/adapter-nextjs": "^1.2.4",
     "@aws-amplify/ui-react": "^6.1.12",
+    "@tanstack/react-query": "^5.48.0",
     "@trivago/prettier-plugin-sort-imports": "^4.3.0",
     "aws-amplify": "^6.3.7",
     "next": "14.2.3",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "react-hook-form": "^7.52.0"
   },
   "devDependencies": {
     "@aws-amplify/backend": "^1.0.3",

@@ -3,7 +3,7 @@ import { Inter } from "next/font/google";
 
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
-import Auth from "@/components/contexts/Auth";
+import AuthQueryProvider from "@/components/contexts/Auth";
 import { isAuthenticated } from "@/components/contexts/amplifyUtils";
 
 import "./globals.css";
@@ -23,9 +23,10 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <Header isSignedIn={await isAuthenticated()} />
-        <Auth>{children}</Auth>
-        <Footer />
+        <AuthQueryProvider>
+          <Header isSignedIn={await isAuthenticated()} />
+          {children} <Footer />
+        </AuthQueryProvider>
       </body>
     </html>
   );
