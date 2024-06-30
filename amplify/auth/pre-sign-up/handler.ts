@@ -38,8 +38,8 @@ export const dataClient = generateClient<Schema>();
 
 export const handler: PreSignUpTriggerHandler = async (event) => {
   return await dataClient.models.User.create({
-    firstName: "Default",
-    lastName: "Name",
+    firstName: "",
+    lastName: "",
     role: "GuestUser",
     id: event.userName,
     email: event.request.userAttributes.email,

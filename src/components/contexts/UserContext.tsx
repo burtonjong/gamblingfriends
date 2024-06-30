@@ -24,6 +24,7 @@ export interface IUser {
   email?: string;
   populated: boolean;
   signedIn?: boolean;
+  role?: string;
 }
 
 interface IUserReturn {
@@ -80,14 +81,10 @@ export function UserContextProvider({ children }: Props) {
           email: response.data?.email ?? "",
           firstName: response.data?.firstName ?? "",
           lastName: response.data?.lastName ?? "",
+          role: response.data?.role ?? "",
         });
       } catch (err) {
         if (String(err).includes("No user")) {
-          setCurrentUser({
-            username: "",
-            type: UserType.GuestUser,
-            populated: true,
-          });
           console.info("Not Logged in");
         } else {
           console.error(err);
@@ -98,7 +95,7 @@ export function UserContextProvider({ children }: Props) {
   }, []);
   return (
     <UserContext.Provider value={{ currentUser }}>
-      {currentUser.populated && children}
+      {children}
     </UserContext.Provider>
   );
 }
