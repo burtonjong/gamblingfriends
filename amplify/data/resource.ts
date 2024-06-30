@@ -22,7 +22,7 @@ const schema = a
       })
       .authorization((allow) => [
         allow.group("GuestUser").to(["read"]),
-        allow.group("AdminUser").to(["read", "update", "delete"]),
+        allow.group("AdminUser").to(["read", "update", "delete", "create"]),
       ]),
     SessionsAttended: a
       .model({
@@ -33,7 +33,7 @@ const schema = a
       })
       .authorization((allow) => [
         allow.group("GuestUser").to(["read"]),
-        allow.group("AdminUser").to(["read", "update", "delete"]),
+        allow.group("AdminUser").to(["read", "update", "delete", "create"]),
       ]),
   })
   .authorization((allow) => [allow.resource(preSignUp).to(["mutate"])]);
