@@ -11,18 +11,14 @@ import { type Schema } from "../../../amplify/data/resource";
 
 const client = generateClient<Schema>();
 
-interface DataRow {
-  date: string;
-  name: string;
+const columns1: TableColumn<{
+  gamblerName: string;
   totalEarnings: number;
   sesssionsAttend: number;
-  peopleAtSession: number;
-}
-
-const columns1: TableColumn<DataRow>[] = [
+}>[] = [
   {
     name: "Name",
-    selector: (row) => row.name,
+    selector: (row) => row.gamblerName,
     sortable: true,
   },
   {
@@ -36,19 +32,24 @@ const columns1: TableColumn<DataRow>[] = [
     sortable: true,
   },
 ];
-const columns2: TableColumn<DataRow>[] = [
+const columns2: TableColumn<{
+  date: string;
+  peopleAtSession: number;
+}>[] = [
   {
     name: "Date",
     selector: (row) => row.date,
+    sortable: true,
   },
   {
     name: "People At Session",
     selector: (row) => row.peopleAtSession,
+    sortable: true,
   },
 ];
 const data1 = [
-  { name: "Black Burton", totalEarnings: 100, sesssionsAttend: 3 },
-  { name: "Yellow Austin", totalEarnings: 150, sesssionsAttend: 5 },
+  { gamblerName: "Black Burton", totalEarnings: 100, sesssionsAttend: 3 },
+  { gamblerName: "Yellow Austin", totalEarnings: 150, sesssionsAttend: 5 },
 ];
 
 const data2 = [
@@ -57,7 +58,7 @@ const data2 = [
 ];
 
 export default function MainSpreadsheet() {
-  const { data, isFetching } = useQuery({
+  /*const { data, isFetching } = useQuery({
     initialData: [] as Schema["User"]["type"][],
     initialDataUpdatedAt: 0,
     queryKey: ["Users", {}],
@@ -65,7 +66,7 @@ export default function MainSpreadsheet() {
       const response = await client.models.User.list();
       return response.data;
     },
-  });
+  });*/
   const [showTable, toggleShowTable] = useState(true);
 
   return (
