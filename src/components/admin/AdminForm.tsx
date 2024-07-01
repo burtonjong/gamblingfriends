@@ -8,6 +8,7 @@ import { type Schema } from "@/../amplify/data/resource";
 
 const client = generateClient<Schema>();
 
+//we need to assign a list of these User objects to the useState
 type User = {
   id: string;
   email: string;
@@ -17,7 +18,7 @@ type User = {
   totalEarnings?: number;
   sessionsAttended: SessionAttended[];
 };
-
+//referenced by User objects
 type SessionAttended = {
   id: string;
   sessionAttendedId: string;
@@ -37,10 +38,13 @@ export default function AdminForm() {
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const { register, handleSubmit, reset } = useForm<SessionFormData>();
 
+  //to get all the users in our database
   useEffect(() => {
     async function fetchUsers() {
       try {
         const response = await client.models.User.list();
+        //console.log("response from client.models.User.list(): ")
+        //console.log(response)
         const userList = response.data as unknown as User[];
         setUsers(userList);
       } catch (error) {
@@ -82,8 +86,8 @@ export default function AdminForm() {
   return (
     <div style={{ display: "flex" }}>
       <div>
-        <p>Admin</p>
-        <input
+        <h1>Admin Page</h1>
+        <input //the search bar
           type="text"
           placeholder="Search for a name"
           value={searchQuery}
@@ -96,12 +100,12 @@ export default function AdminForm() {
               onClick={() => handleUserClick(user)}
               style={{ cursor: "pointer" }}
             >
-              {user.firstName} {user.lastName} ({user.email}) - Role:{" "}
-              {user.role}
+              {user.firstName} {user.lastName} ({user.email}){user.role}
             </li>
           ))}
         </ul>
       </div>
+
       {selectedUser && (
         <div style={{ marginLeft: "20px" }}>
           <h3>
