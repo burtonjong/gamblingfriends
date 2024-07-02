@@ -12,8 +12,8 @@ interface Props {
 }
 
 export enum UserType {
-  Admin = "Admin",
-  Guest = "Guest",
+  AdminUser = "AdminUser",
+  GuestUser = "GuestUser",
 }
 
 export interface IUser {
@@ -24,6 +24,7 @@ export interface IUser {
   email?: string;
   populated: boolean;
   signedIn?: boolean;
+  role?: string;
 }
 
 interface IUserReturn {
@@ -38,7 +39,7 @@ export const UserContext = createContext<IUserReturn>({} as IUserReturn);
 export function UserContextProvider({ children }: Props) {
   const [currentUser, setCurrentUser] = useState<IUser>({
     username: "",
-    type: UserType.Guest,
+    type: UserType.GuestUser,
     populated: false,
   });
   // TO DO load other user info from table
@@ -80,14 +81,10 @@ export function UserContextProvider({ children }: Props) {
           email: response.data?.email ?? "",
           firstName: response.data?.firstName ?? "",
           lastName: response.data?.lastName ?? "",
+          role: response.data?.role ?? "",
         });
       } catch (err) {
         if (String(err).includes("No user")) {
-          setCurrentUser({
-            username: "",
-            type: UserType.Guest,
-            populated: true,
-          });
           console.info("Not Logged in");
         } else {
           console.error(err);
@@ -98,7 +95,7 @@ export function UserContextProvider({ children }: Props) {
   }, []);
   return (
     <UserContext.Provider value={{ currentUser }}>
-      {currentUser.populated && children}
+      {children}
     </UserContext.Provider>
   );
 }

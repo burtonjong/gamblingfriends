@@ -19,13 +19,13 @@ const schema = a
         email: a.string().required(),
         firstName: a.string().required(),
         lastName: a.string().required(),
+        role: a.string().default("GuestUser"),
         totalEarnings: a.float(),
         sessionsAttended: a.hasMany("SessionsAttended", "sessionAttendedId"),
       })
       .authorization((allow) => [
-        // allow.group("Guest").to(["read"]),
-        // allow.group("Admin").to(["read", "update", "delete"]),
-        allow.authenticated(),
+        allow.group("GuestUser").to(["read"]),
+        allow.group("AdminUser").to(["read", "update", "delete", "create"]),
       ]),
     SessionsAttended: a
       .model({
@@ -35,9 +35,8 @@ const schema = a
         date: a.belongsTo("User", "sessionAttendedId"),
       })
       .authorization((allow) => [
-        // allow.group("Guest").to(["read"]),
-        // allow.group("Admin").to(["read", "update", "delete"]),
-        allow.authenticated(),
+        allow.group("GuestUser").to(["read"]),
+        allow.group("AdminUser").to(["read", "update", "delete", "create"]),
       ]),
   })
   .authorization((allow) => [allow.resource(postConfirmation)]);
