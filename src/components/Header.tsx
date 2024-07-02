@@ -6,7 +6,11 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
-export default function Header({ isSignedIn }: { isSignedIn: boolean }) {
+export default function Header({
+  isSignedIn,
+}: {
+  isSignedIn: boolean | undefined;
+}) {
   const [authCheck, setAuthCheck] = useState(isSignedIn);
 
   const router = useRouter();
