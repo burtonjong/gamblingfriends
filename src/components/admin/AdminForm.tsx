@@ -37,6 +37,7 @@ export default function AdminForm() {
   const [users, setUsers] = useState<User[]>([]);
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
+  const [formSubmitted, setFormSubmitted] = useState<boolean>(false);
   const { register, handleSubmit, reset } = useForm<SessionFormData>();
 
   //to get all the users in our database
@@ -57,6 +58,7 @@ export default function AdminForm() {
   const handleUserClick = (user: User) => {
     setSelectedUser(user);
     reset(); // Reset the form when a new user is selected
+    setFormSubmitted(false); // Reset form submitted state
   };
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -71,6 +73,8 @@ export default function AdminForm() {
       });
       // Optionally refetch users or update local state
       console.log("Session added:", data);
+      setFormSubmitted(true);
+      setTimeout(() => setFormSubmitted(false), 5000); //hide message after 5 seconds
     } catch (error) {
       console.error("Error creating session:", error);
     }
@@ -172,15 +176,21 @@ export default function AdminForm() {
               type="submit"
               style={{
                 padding: "10px",
-                backgroundColor: "#007bff",
+                backgroundColor: formSubmitted ? "green" : "#007bff",
                 color: "#fff",
                 border: "none",
                 borderRadius: "4px",
                 cursor: "pointer",
+                transition: "background-color 0.3s ease",
               }}
             >
-              Add Session
+              {formSubmitted ? "Session Added" : "Add Session"}
             </button>
+            {formSubmitted && (
+              <div style={{ marginTop: "10px", color: "green" }}>
+                Session has been successfully added!
+              </div>
+            )}
           </form>
         </div>
       )}
