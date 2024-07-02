@@ -12,6 +12,8 @@ import { type Schema } from "../../../amplify/data/resource";
 type Nullable<T> = T | null;
 
 const client = generateClient<Schema>();
+
+// The first table coloumns and titles
 const t1: TableColumn<{
   gamblerName: string;
   totalEarnings: Nullable<number> | undefined;
@@ -33,7 +35,9 @@ const t1: TableColumn<{
     sortable: true,
   },
 ];
-const t2: TableColumn<{
+
+// The second table coloumns and titles
+/*const t2: TableColumn<{
   date: string;
   peopleAtSession: number;
 }>[] = [
@@ -47,7 +51,7 @@ const t2: TableColumn<{
     selector: (row) => row.peopleAtSession,
     sortable: true,
   },
-];
+];*/
 
 export default function MainSpreadsheet() {
   const [showTable, toggleShowTable] = useState(true);
@@ -94,17 +98,23 @@ export default function MainSpreadsheet() {
                       sesssionsAttend: user.sessionsAttended.length,
                     })) || []
                   }
+                  pagination
                 />
               ) : (
                 <>
-                  {/*<DataTable
-                    columns={t2}
-                    data={
-                      data?.map((user) => ({
-                        date: user.sessionsAttended.,
-                      })) || []
-                    }
-                  />*/}
+                  {/* For session date and people at session when we fix
+                    <DataTable
+                      columns={t2}
+                      data={
+                        data?.map((user) => ({
+                          date: user.sessionsAttended
+                            .map((session) => session.date)
+                            .join(", "),
+                        })) || []
+                      }
+                      pagination
+                    />
+                  */}
                   <div>
                     <a href="">beep</a>
                   </div>
