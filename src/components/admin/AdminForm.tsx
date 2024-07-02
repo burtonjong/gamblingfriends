@@ -9,23 +9,7 @@ import { type Schema } from "@/../amplify/data/resource";
 const client = generateClient<Schema>();
 
 //we need to assign a list of these User objects to the useState
-type User = {
-  id: string;
-  email: string;
-  firstName: string;
-  lastName: string;
-  role: string;
-  totalEarnings?: number;
-  sessionsAttended: SessionAttended[];
-};
-
-//referenced by User objects
-type SessionAttended = {
-  id: string;
-  sessionAttendedId: string;
-  earningsThatSession?: number;
-  date: string;
-};
+type User = Schema["User"]["type"];
 
 type SessionFormData = {
   sessionAttendedId: string;
