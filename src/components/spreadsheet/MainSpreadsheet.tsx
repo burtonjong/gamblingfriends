@@ -9,11 +9,12 @@ import { useQuery } from "@tanstack/react-query";
 
 import { type Schema } from "../../../amplify/data/resource";
 
-const client = generateClient<Schema>();
+type Nullable<T> = T | null;
 
-const columns1: TableColumn<{
+const client = generateClient<Schema>();
+const t1: TableColumn<{
   gamblerName: string;
-  totalEarnings: number;
+  totalEarnings: Nullable<number> | undefined;
   sesssionsAttend: number;
 }>[] = [
   {
@@ -23,7 +24,7 @@ const columns1: TableColumn<{
   },
   {
     name: "Total Earnings",
-    selector: (row) => row.totalEarnings,
+    selector: (row) => row.totalEarnings ?? 0,
     sortable: true,
   },
   {
@@ -32,7 +33,7 @@ const columns1: TableColumn<{
     sortable: true,
   },
 ];
-const columns2: TableColumn<{
+const t2: TableColumn<{
   date: string;
   peopleAtSession: number;
 }>[] = [
@@ -47,48 +48,71 @@ const columns2: TableColumn<{
     sortable: true,
   },
 ];
-const data1 = [
-  { gamblerName: "Black Burton", totalEarnings: 100, sesssionsAttend: 3 },
-  { gamblerName: "Yellow Austin", totalEarnings: 150, sesssionsAttend: 5 },
-];
-
-const data2 = [
-  { date: "2022-01-01", peopleAtSession: 5 },
-  { date: "2022-01-02", peopleAtSession: 6 },
-];
 
 export default function MainSpreadsheet() {
-  /*const { data, isFetching } = useQuery({
+  const [showTable, toggleShowTable] = useState(true);
+
+  const { data, isFetching } = useQuery({
     initialData: [] as Schema["User"]["type"][],
     initialDataUpdatedAt: 0,
     queryKey: ["Users", {}],
     queryFn: async () => {
-      const response = await client.models.User.list();
-      return response.data;
+      try {
+        const response = await client.models.User.list();
+        return response.data;
+      } catch (error) {
+        console.error(error);
+      }
     },
-  });*/
-  const [showTable, toggleShowTable] = useState(true);
+  });
 
   return (
     <div className="flex w-full flex-row">
       <div className="size-full">
-        <div className="flex flex-row gap-4">
-          <button className="" onClick={() => toggleShowTable(true)}>
-            Home
-          </button>
-          <button className="" onClick={() => toggleShowTable(false)}>
-            Sessions Attended
-          </button>
-        </div>
-        <div>
-          {showTable ? (
-            <DataTable columns={columns1} data={data1} />
-          ) : (
-            <DataTable columns={columns2} data={data2} />
-          )}
-
-          {/* Podium or popup of whatever */}
-        </div>
+        {isFetching ? (
+          <div>
+            <h1>Loading...</h1>
+          </div>
+        ) : (
+          <>
+            <div className="flex flex-row gap-4">
+              <button className="" onClick={() => toggleShowTable(true)}>
+                Home
+              </button>
+              <button className="" onClick={() => toggleShowTable(false)}>
+                Sessions Attended
+              </button>
+            </div>
+            <div>
+              {showTable ? (
+                <DataTable
+                  columns={t1}
+                  data={
+                    data?.map((user) => ({
+                      gamblerName: user.firstName + " " + user.lastName,
+                      totalEarnings: user.totalEarnings,
+                      sesssionsAttend: user.sessionsAttended.length,
+                    })) || []
+                  }
+                />
+              ) : (
+                <>
+                  {/*<DataTable
+                    columns={t2}
+                    data={
+                      data?.map((user) => ({
+                        date: user.sessionsAttended.,
+                      })) || []
+                    }
+                  />*/}
+                  <div>
+                    <a href="">beep</a>
+                  </div>
+                </>
+              )}
+            </div>
+          </>
+        )}
       </div>
     </div>
   );
