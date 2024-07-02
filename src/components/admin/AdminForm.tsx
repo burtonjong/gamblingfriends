@@ -18,6 +18,7 @@ type User = {
   totalEarnings?: number;
   sessionsAttended: SessionAttended[];
 };
+
 //referenced by User objects
 type SessionAttended = {
   id: string;
@@ -43,8 +44,6 @@ export default function AdminForm() {
     async function fetchUsers() {
       try {
         const response = await client.models.User.list();
-        //console.log("response from client.models.User.list(): ")
-        //console.log(response)
         const userList = response.data as unknown as User[];
         setUsers(userList);
       } catch (error) {
@@ -84,47 +83,104 @@ export default function AdminForm() {
   );
 
   return (
-    <div style={{ display: "flex" }}>
-      <div>
+    <div style={{ display: "flex", gap: "20px", padding: "20px" }}>
+      <div style={{ flex: "1" }}>
         <h1>Admin Page</h1>
-        <input //the search bar
+        <input
           type="text"
           placeholder="Search for a name"
           value={searchQuery}
           onChange={handleSearchChange}
+          style={{
+            padding: "8px",
+            marginBottom: "10px",
+            border: "1px solid #ccc",
+            borderRadius: "4px",
+            width: "100%",
+          }}
         />
-        <ul>
+        <ul style={{ listStyleType: "none", padding: "0" }}>
           {filteredUsers.map((user) => (
             <li
               key={user.id}
               onClick={() => handleUserClick(user)}
-              style={{ cursor: "pointer" }}
+              style={{
+                cursor: "pointer",
+                padding: "10px",
+                marginBottom: "5px",
+                border: "1px solid #ccc",
+                borderRadius: "4px",
+                backgroundColor:
+                  selectedUser && selectedUser.id === user.id
+                    ? "#f0f0f0"
+                    : "#fff",
+              }}
             >
-              {user.firstName} {user.lastName} ({user.email}){user.role}
+              <strong>
+                {user.firstName} {user.lastName}
+              </strong>
+              <div>{user.email}</div>
             </li>
           ))}
         </ul>
       </div>
 
       {selectedUser && (
-        <div style={{ marginLeft: "20px" }}>
+        <div style={{ flex: "1" }}>
           <h3>
-            Add Session for {selectedUser.firstName} {selectedUser.lastName}
+            Add a Session for {selectedUser.firstName} {selectedUser.lastName}
           </h3>
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <div>
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              gap: "10px",
+              padding: "20px",
+              border: "1px solid #ccc",
+              borderRadius: "4px",
+              backgroundColor: "#fafafa",
+            }}
+          >
+            <div style={{ marginBottom: "10px" }}>
               <label>Date</label>
-              <input type="date" {...register("date", { required: true })} />
+              <input
+                type="date"
+                {...register("date", { required: true })}
+                style={{
+                  padding: "8px",
+                  border: "1px solid #ccc",
+                  borderRadius: "4px",
+                  width: "100%",
+                }}
+              />
             </div>
-            <div>
+            <div style={{ marginBottom: "10px" }}>
               <label>Earnings</label>
               <input
                 type="number"
-                step="0.01"
                 {...register("earningsThatSession", { required: true })}
+                style={{
+                  padding: "8px",
+                  border: "1px solid #ccc",
+                  borderRadius: "4px",
+                  width: "100%",
+                }}
               />
             </div>
-            <button type="submit">Add Session</button>
+            <button
+              type="submit"
+              style={{
+                padding: "10px",
+                backgroundColor: "#007bff",
+                color: "#fff",
+                border: "none",
+                borderRadius: "4px",
+                cursor: "pointer",
+              }}
+            >
+              Add Session
+            </button>
           </form>
         </div>
       )}

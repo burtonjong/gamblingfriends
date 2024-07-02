@@ -29,7 +29,7 @@ const schema = a
         id: a.id().required(),
         sessionAttendedId: a.id().required(),
         earningsThatSession: a.float(),
-        date: a.belongsTo("User", "sessionAttendedId"),
+        date: a.belongsTo("User", "sessionAttendedId"), //date belongs to a user? -matthew july 1
       })
       .authorization((allow) => [
         allow.group("GuestUser").to(["read"]),
