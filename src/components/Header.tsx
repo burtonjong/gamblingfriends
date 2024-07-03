@@ -64,7 +64,7 @@ export default function Header({
 
   if (user.role !== "AdminUser") {
     renderedRoutes = loggedInRoutes.filter(
-      (route) => route.name != "Admin Panel",
+      (route) => route.name !== "Admin Panel",
     );
   }
 

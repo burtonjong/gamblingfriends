@@ -1,14 +1,15 @@
 "use client";
 
 import { generateClient } from "aws-amplify/data";
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 
 import { type Schema } from "@/../amplify/data/resource";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 const client = generateClient<Schema>();
 
-//we need to assign a list of these User objects to the useState
+//definition of user, taken directly from Schema, used in Tanstack useQuery
 type User = Schema["User"]["type"];
 
 type SessionFormData = {
@@ -18,26 +19,24 @@ type SessionFormData = {
 };
 
 export default function AdminForm() {
-  const [users, setUsers] = useState<User[]>([]);
+  const queryClient = useQueryClient();
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [formSubmitted, setFormSubmitted] = useState<boolean>(false);
   const { register, handleSubmit, reset } = useForm<SessionFormData>();
 
   //to get all the users in our database
-  useEffect(() => {
-    async function fetchUsers() {
-      try {
-        const response = await client.models.User.list();
-        const userList = response.data as unknown as User[];
-        setUsers(userList);
-      } catch (error) {
-        console.error("Error fetching users:", error);
-      }
-    }
-
-    fetchUsers();
-  }, []);
+  const {
+    data: users = [],
+    isLoading,
+    error,
+  } = useQuery<User[]>({
+    queryKey: ["users"],
+    queryFn: async () => {
+      const response = await client.models.User.list();
+      return response.data as User[];
+    },
+  });
 
   const handleUserClick = (user: User) => {
     setSelectedUser(user);
@@ -49,19 +48,26 @@ export default function AdminForm() {
     setSearchQuery(event.target.value);
   };
 
-  const onSubmit = async (data: SessionFormData) => {
-    try {
+  //a Tanstack mutation to add Sessions to Users
+  const mutation = useMutation({
+    mutationFn: async (data: SessionFormData) => {
       await client.models.SessionsAttended.create({
         ...data,
         sessionAttendedId: selectedUser!.id,
       });
-      // Optionally refetch users or update local state
-      console.log("Session added:", data);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["users"] });
       setFormSubmitted(true);
-      setTimeout(() => setFormSubmitted(false), 5000); //hide message after 5 seconds
-    } catch (error) {
+      setTimeout(() => setFormSubmitted(false), 5000); //hide the successs message after 5 seconds
+    },
+    onError: (error) => {
       console.error("Error creating session:", error);
-    }
+    },
+  });
+
+  const onSubmit = (data: SessionFormData) => {
+    mutation.mutate(data);
   };
 
   const filteredUsers = users.filter((user) =>
@@ -71,107 +77,77 @@ export default function AdminForm() {
   );
 
   return (
-    <div style={{ display: "flex", gap: "20px", padding: "20px" }}>
-      <div style={{ flex: "1" }}>
-        <h1>Admin Page</h1>
+    <div className="flex gap-5 p-5">
+      <div className="flex-1">
+        <h1>Select a User</h1>
         <input
           type="text"
           placeholder="Search for a name"
           value={searchQuery}
           onChange={handleSearchChange}
-          style={{
-            padding: "8px",
-            marginBottom: "10px",
-            border: "1px solid #ccc",
-            borderRadius: "4px",
-            width: "100%",
-          }}
+          className="mb-2.5 w-full rounded border border-gray-300 p-2"
         />
-        <ul style={{ listStyleType: "none", padding: "0" }}>
-          {filteredUsers.map((user) => (
-            <li
-              key={user.id}
-              onClick={() => handleUserClick(user)}
-              style={{
-                cursor: "pointer",
-                padding: "10px",
-                marginBottom: "5px",
-                border: "1px solid #ccc",
-                borderRadius: "4px",
-                backgroundColor:
+        {isLoading ? (
+          <p>Loading users...</p>
+        ) : error ? (
+          <p>Error fetching users</p>
+        ) : (
+          <ul className="list-none p-0">
+            {filteredUsers.map((user) => (
+              <li
+                key={user.id}
+                onClick={() => handleUserClick(user)}
+                className={`mb-1.25 cursor-pointer rounded border border-gray-300 p-2.5 ${
                   selectedUser && selectedUser.id === user.id
-                    ? "#f0f0f0"
-                    : "#fff",
-              }}
-            >
-              <strong>
-                {user.firstName} {user.lastName}
-              </strong>
-              <div>{user.email}</div>
-            </li>
-          ))}
-        </ul>
+                    ? "bg-gray-200"
+                    : "bg-white"
+                }`}
+              >
+                <strong>
+                  {user.firstName} {user.lastName}
+                </strong>
+                <div>{user.email}</div>
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
 
       {selectedUser && (
-        <div style={{ flex: "1" }}>
+        <div className="flex-1">
           <h3>
             Add a Session for {selectedUser.firstName} {selectedUser.lastName}
           </h3>
           <form
             onSubmit={handleSubmit(onSubmit)}
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              gap: "10px",
-              padding: "20px",
-              border: "1px solid #ccc",
-              borderRadius: "4px",
-              backgroundColor: "#fafafa",
-            }}
+            className="flex flex-col gap-2.5 rounded border border-gray-300 bg-gray-100 p-5"
           >
-            <div style={{ marginBottom: "10px" }}>
+            <div className="mb-2.5">
               <label>Date</label>
               <input
                 type="date"
                 {...register("date", { required: true })}
-                style={{
-                  padding: "8px",
-                  border: "1px solid #ccc",
-                  borderRadius: "4px",
-                  width: "100%",
-                }}
+                className="w-full rounded border border-gray-300 p-2"
               />
             </div>
-            <div style={{ marginBottom: "10px" }}>
+            <div className="mb-2.5">
               <label>Earnings</label>
               <input
                 type="number"
                 {...register("earningsThatSession", { required: true })}
-                style={{
-                  padding: "8px",
-                  border: "1px solid #ccc",
-                  borderRadius: "4px",
-                  width: "100%",
-                }}
+                className="w-full rounded border border-gray-300 p-2"
               />
             </div>
             <button
               type="submit"
-              style={{
-                padding: "10px",
-                backgroundColor: formSubmitted ? "green" : "#007bff",
-                color: "#fff",
-                border: "none",
-                borderRadius: "4px",
-                cursor: "pointer",
-                transition: "background-color 0.3s ease",
-              }}
+              className={`p-2.5 ${
+                formSubmitted ? "bg-green-500" : "bg-blue-600"
+              } cursor-pointer rounded border-none text-white transition-colors duration-300 ease-in-out`}
             >
               {formSubmitted ? "Session Added" : "Add Session"}
             </button>
             {formSubmitted && (
-              <div style={{ marginTop: "10px", color: "green" }}>
+              <div className="mt-2.5 text-green-500">
                 Session has been successfully added!
               </div>
             )}
