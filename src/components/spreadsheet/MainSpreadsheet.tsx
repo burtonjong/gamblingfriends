@@ -115,9 +115,6 @@ export default function MainSpreadsheet() {
                       pagination
                     />
                   */}
-                  <div>
-                    <a href="">beep</a>
-                  </div>
                 </>
               )}
             </div>
