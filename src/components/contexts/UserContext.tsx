@@ -91,7 +91,6 @@ export function UserContextProvider({ children }: Props) {
         } catch (error) {
           console.error(error);
         }
-
         // Set user information based on the authentication session...
       } catch (error) {
         if (String(error).includes("No user")) {
