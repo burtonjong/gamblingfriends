@@ -22,5 +22,6 @@ export async function isAuthenticated() {
     return !!currentUser;
   } catch (error) {
     console.error(error);
+    return false;
   }
 }
