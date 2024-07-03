@@ -16,13 +16,14 @@ const schema = a
         email: a.string().required(),
         firstName: a.string().required(),
         lastName: a.string().required(),
-        role: a.string().default("GuestUser"),
+        role: a.string().default("FirstTimeUser"),
         totalEarnings: a.float(),
         sessionsAttended: a.hasMany("SessionsAttended", "sessionAttendedId"),
       })
       .authorization((allow) => [
         allow.group("GuestUser").to(["read"]),
         allow.group("AdminUser").to(["read", "update", "delete", "create"]),
+        allow.group("FirstTimeUser").to(["read"]),
       ]),
     SessionsAttended: a
       .model({

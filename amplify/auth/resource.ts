@@ -11,7 +11,7 @@ export const auth = defineAuth({
   loginWith: {
     email: true,
   },
-  groups: ["AdminUser", "GuestUser"],
+  groups: ["AdminUser", "GuestUser", "FirstTimeUser"],
   triggers: {
     postConfirmation,
     preSignUp,
