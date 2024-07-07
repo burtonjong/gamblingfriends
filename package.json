@@ -17,6 +17,7 @@
     "aws-amplify": "^6.3.7",
     "next": "14.2.3",
     "react": "^18",
+    "react-data-table-component": "^7.6.2",
     "react-dom": "^18",
     "react-hook-form": "^7.52.0"
   },
