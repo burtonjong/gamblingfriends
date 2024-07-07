@@ -18,19 +18,20 @@ const schema = a
         lastName: a.string().required(),
         role: a.string().default("FirstTimeUser"),
         totalEarnings: a.float(),
-        sessionsAttended: a.hasMany("SessionsAttended", "sessionAttendedId"),
+        sessionsAttended: a.hasMany("SessionAttended", "sessionAttendedId"),
       })
       .authorization((allow) => [
         allow.group("GuestUser").to(["read"]),
         allow.group("AdminUser").to(["read", "update", "delete", "create"]),
         allow.group("FirstTimeUser").to(["read"]),
       ]),
-    SessionsAttended: a
+    SessionAttended: a
       .model({
         id: a.id().required(),
         sessionAttendedId: a.id().required(),
         earningsThatSession: a.float(),
-        date: a.belongsTo("User", "sessionAttendedId"),
+        date: a.date().required(),
+        user: a.belongsTo("User", "sessionAttendedId"),
       })
       .authorization((allow) => [
         allow.group("GuestUser").to(["read"]),
