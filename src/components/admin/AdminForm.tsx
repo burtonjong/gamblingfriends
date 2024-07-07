@@ -51,7 +51,7 @@ export default function AdminForm() {
   //a Tanstack mutation to add Sessions to Users
   const mutation = useMutation({
     mutationFn: async (data: SessionFormData) => {
-      await client.models.SessionsAttended.create({
+      await client.models.SessionAttended.create({
         ...data,
         sessionAttendedId: selectedUser!.id,
       });

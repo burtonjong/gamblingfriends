@@ -19,7 +19,7 @@ export default function Podium() {
         const usersResponse = await client.models.User.list();
         const usersWithSessions = await Promise.all(
           usersResponse.data.map(async (user) => {
-            const sessionsResponse = await client.models.SessionsAttended.list({
+            const sessionsResponse = await client.models.SessionAttended.list({
               filter: { sessionAttendedId: { eq: user.id } },
             });
             return {
