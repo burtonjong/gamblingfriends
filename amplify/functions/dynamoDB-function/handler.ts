@@ -3,10 +3,12 @@ import { generateClient } from "aws-amplify/data";
 import type { DynamoDBStreamHandler } from "aws-lambda";
 
 import { type Schema } from "@/../../amplify/data/resource";
-import { data } from "@/../../amplify_outputs.json";
 import { Logger } from "@aws-lambda-powertools/logger";
 import type { AttributeValue } from "@aws-sdk/client-dynamodb";
 import { unmarshall } from "@aws-sdk/util-dynamodb";
+
+import { updateUser } from "./graphql/mutations";
+import { getUser } from "./graphql/queries";
 
 const logger = new Logger({
   logLevel: "INFO",
@@ -19,8 +21,7 @@ Amplify.configure(
       GraphQL: {
         endpoint: process.env.AMPLIFY_DATA_GRAPHQL_ENDPOINT as string,
         region: process.env.AWS_REGION,
-        defaultAuthMode: "identityPool",
-        modelIntrospection: data.model_introspection as any,
+        defaultAuthMode: "iam",
       },
     },
   },
@@ -57,53 +58,71 @@ export const handler: DynamoDBStreamHandler = async (event) => {
       logger.info(`New Image: ${JSON.stringify(newImage)}`);
 
       if (record.eventName === "INSERT" || record.eventName === "MODIFY") {
-        const userId = newImage.id as string;
-        const profit = newImage.profitThatSession;
+        const userId = newImage.sessionAttendedId as string;
+        const earnings = newImage.earningsThatSession;
 
-        logger.info(`User id: ${userId}`);
-
-        // Fetch the current totalProfit
-        // const user = await dynamoDb.get({
-        //   TableName: usersTable,
-        //   Key: { userId }
-        // }).promise();
+        logger.info(`profit that session: ${earnings}`);
 
         try {
-          const user = await dataClient.models.User.get({ id: userId });
-          const totalProfit = (user.data?.totalEarnings || 0) + profit;
-          const response = await dataClient.models.User.update({
-            id: userId,
-            totalEarnings: totalProfit,
+          const user = await dataClient.graphql({
+            query: getUser,
+            variables: {
+              id: userId,
+            },
           });
-          logger.info(`User updated: ${JSON.stringify(response)}`);
-        } catch (error) {
-          logger.error(`Error fetching user: ${error}`);
-        }
 
-        // Update the totalProfit
-        // await dynamoDb.update({
-        //   TableName: usersTable,
-        //   Key: { userId },
-        //   UpdateExpression: 'SET totalProfit = :val',
-        //   ExpressionAttributeValues: { ':val': totalProfit }
-        // }).promise();
+          const totalEarnings =
+            (user.data.getUser?.totalEarnings || 0) + earnings;
+          logger.info(`User: ${user}`);
+          logger.info(`Total Profit: ${totalEarnings}`);
+
+          const response = await dataClient.graphql({
+            query: updateUser,
+            variables: {
+              input: {
+                id: userId,
+                totalEarnings: totalEarnings,
+              },
+            },
+          });
+          logger.info(
+            `User updated after addition of session: ${JSON.stringify(response)}`,
+          );
+        } catch (error) {
+          logger.error(`Error fetching user: ${JSON.stringify(error)}`);
+        }
       } else if (record.eventName === "REMOVE") {
-        // const oldImage = unmarshall(record.dynamodb.OldImage);
-        // const userId = oldImage.userId;
-        // const profit = oldImage.profitThatSession;
-        // Fetch the current totalProfit
-        // const user = await dynamoDb.get({
-        //   TableName: usersTable,
-        //   Key: { userId }
-        // }).promise();
-        // const totalProfit = (user.Item?.totalProfit || 0) - profit;
-        // Update the totalProfit
-        // await dynamoDb.update({
-        //   TableName: usersTable,
-        //   Key: { userId },
-        //   UpdateExpression: 'SET totalProfit = :val',
-        //   ExpressionAttributeValues: { ':val': totalProfit }
-        // }).promise();
+        const oldImage = unmarshall(
+          record.dynamodb.OldImage as Record<string, AttributeValue>,
+        );
+        const userId = oldImage.sessionAttendedId as string;
+        const profit = oldImage.earningsThatSession;
+        try {
+          const user = await dataClient.graphql({
+            query: getUser,
+            variables: {
+              id: userId,
+            },
+          });
+
+          const totalEarnings =
+            (user.data.getUser?.totalEarnings || 0) - profit;
+
+          const response = await dataClient.graphql({
+            query: updateUser,
+            variables: {
+              input: {
+                id: userId,
+                totalEarnings: totalEarnings,
+              },
+            },
+          });
+          logger.info(
+            `User updated after deletion of session: ${JSON.stringify(response)}`,
+          );
+        } catch (error) {
+          logger.error(`Error fetching user: ${JSON.stringify(error)}`);
+        }
       }
     }
   }
