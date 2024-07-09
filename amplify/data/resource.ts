@@ -1,6 +1,7 @@
 import { type ClientSchema, a, defineData } from "@aws-amplify/backend";
 
 import { preSignUp } from "../auth/pre-sign-up/resource";
+import { myDynamoDBFunction } from "../functions/dynamoDB-function/resource";
 
 /*== STEP 1 ===============================================================
 The section below creates a Todo database table with a "content" field. Try
@@ -38,7 +39,10 @@ const schema = a
         allow.group("AdminUser").to(["read", "update", "delete", "create"]),
       ]),
   })
-  .authorization((allow) => [allow.resource(preSignUp).to(["mutate"])]);
+  .authorization((allow) => [
+    allow.resource(preSignUp).to(["mutate"]),
+    allow.resource(myDynamoDBFunction),
+  ]);
 
 export type Schema = ClientSchema<typeof schema>;
 
