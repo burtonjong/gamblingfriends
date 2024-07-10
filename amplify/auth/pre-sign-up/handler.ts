@@ -3,7 +3,9 @@ import { generateClient } from "aws-amplify/data";
 import type { PreSignUpTriggerHandler } from "aws-lambda";
 
 import { type Schema } from "@/../../amplify/data/resource";
-import { data } from "@/../../amplify_outputs.json";
+import amplifyOutputs from "@/../../amplify_outputs.json";
+
+const { data } = amplifyOutputs;
 
 Amplify.configure(
   {
