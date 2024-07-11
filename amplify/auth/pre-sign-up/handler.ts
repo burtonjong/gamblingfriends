@@ -12,7 +12,9 @@ Amplify.configure(
         endpoint: process.env.AMPLIFY_DATA_GRAPHQL_ENDPOINT as string,
         region: process.env.AWS_REGION,
         defaultAuthMode: "identityPool",
-        modelIntrospection: amplifyOutputs.data.model_introspection as any,
+        modelIntrospection: amplifyOutputs["data"][
+          "model_introspection"
+        ] as any,
       },
     },
   },
