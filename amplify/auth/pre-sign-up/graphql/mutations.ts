@@ -1,14 +1,16 @@
 /* tslint:disable */
+
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
-
 import * as APITypes from "./API";
+
 type GeneratedMutation<InputType, OutputType> = string & {
   __generatedMutationInput: InputType;
   __generatedMutationOutput: OutputType;
 };
 
-export const createSessionAttended = /* GraphQL */ `mutation CreateSessionAttended(
+export const createSessionAttended =
+  /* GraphQL */ `mutation CreateSessionAttended(
   $condition: ModelSessionAttendedConditionInput
   $input: CreateSessionAttendedInput!
 ) {
@@ -34,9 +36,9 @@ export const createSessionAttended = /* GraphQL */ `mutation CreateSessionAttend
   }
 }
 ` as GeneratedMutation<
-  APITypes.CreateSessionAttendedMutationVariables,
-  APITypes.CreateSessionAttendedMutation
->;
+    APITypes.CreateSessionAttendedMutationVariables,
+    APITypes.CreateSessionAttendedMutation
+  >;
 export const createUser = /* GraphQL */ `mutation CreateUser(
   $condition: ModelUserConditionInput
   $input: CreateUserInput!
@@ -61,7 +63,8 @@ export const createUser = /* GraphQL */ `mutation CreateUser(
   APITypes.CreateUserMutationVariables,
   APITypes.CreateUserMutation
 >;
-export const deleteSessionAttended = /* GraphQL */ `mutation DeleteSessionAttended(
+export const deleteSessionAttended =
+  /* GraphQL */ `mutation DeleteSessionAttended(
   $condition: ModelSessionAttendedConditionInput
   $input: DeleteSessionAttendedInput!
 ) {
@@ -87,9 +90,9 @@ export const deleteSessionAttended = /* GraphQL */ `mutation DeleteSessionAttend
   }
 }
 ` as GeneratedMutation<
-  APITypes.DeleteSessionAttendedMutationVariables,
-  APITypes.DeleteSessionAttendedMutation
->;
+    APITypes.DeleteSessionAttendedMutationVariables,
+    APITypes.DeleteSessionAttendedMutation
+  >;
 export const deleteUser = /* GraphQL */ `mutation DeleteUser(
   $condition: ModelUserConditionInput
   $input: DeleteUserInput!
@@ -114,7 +117,8 @@ export const deleteUser = /* GraphQL */ `mutation DeleteUser(
   APITypes.DeleteUserMutationVariables,
   APITypes.DeleteUserMutation
 >;
-export const updateSessionAttended = /* GraphQL */ `mutation UpdateSessionAttended(
+export const updateSessionAttended =
+  /* GraphQL */ `mutation UpdateSessionAttended(
   $condition: ModelSessionAttendedConditionInput
   $input: UpdateSessionAttendedInput!
 ) {
@@ -140,9 +144,9 @@ export const updateSessionAttended = /* GraphQL */ `mutation UpdateSessionAttend
   }
 }
 ` as GeneratedMutation<
-  APITypes.UpdateSessionAttendedMutationVariables,
-  APITypes.UpdateSessionAttendedMutation
->;
+    APITypes.UpdateSessionAttendedMutationVariables,
+    APITypes.UpdateSessionAttendedMutation
+  >;
 export const updateUser = /* GraphQL */ `mutation UpdateUser(
   $condition: ModelUserConditionInput
   $input: UpdateUserInput!
