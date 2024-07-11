@@ -1,4 +1,4 @@
-import { fetchAuthSession } from "aws-amplify/auth/server";
+import { getCurrentUser } from "aws-amplify/auth/server";
 import { cookies } from "next/headers";
 
 import { createServerRunner } from "@aws-amplify/adapter-nextjs";
@@ -16,7 +16,7 @@ export async function isAuthenticated() {
   try {
     const currentUser = await runWithAmplifyServerContext({
       nextServerContext: { cookies },
-      operation: (contextSpec: any) => fetchAuthSession(contextSpec),
+      operation: (contextSpec: any) => getCurrentUser(contextSpec),
     });
 
     return !!currentUser;

@@ -23,7 +23,6 @@ export default function Header({
       switch (data.payload.event) {
         case "signedIn":
           setAuthCheck(true);
-          router.push("/home");
           break;
         case "signedOut":
           setAuthCheck(false);
@@ -63,8 +62,6 @@ export default function Header({
       (route) => route.name !== "Admin Panel",
     );
   }
-
-  console.log(data);
 
   return (
     <div className="flex h-24 flex-row items-center justify-evenly bg-slate-500">

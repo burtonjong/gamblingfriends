@@ -14,15 +14,22 @@ const schema = a
     User: a
       .model({
         id: a.id().required(),
-        email: a.string().required(),
-        firstName: a.string().required(),
-        lastName: a.string().required(),
+        email: a.string(),
+        firstName: a.string(),
+        lastName: a.string(),
         role: a.string().default("FirstTimeUser"),
         totalEarnings: a.float(),
+        completedRegistration: a.boolean(),
+        profileOwner: a
+          .string()
+          .authorization((allow) => [
+            allow.ownerDefinedIn("profileOwner").to(["read"]),
+          ]),
         sessionsAttended: a.hasMany("SessionAttended", "sessionAttendedId"),
       })
       .authorization((allow) => [
         allow.group("GuestUser").to(["read"]),
+        allow.ownerDefinedIn("profileOwner").to(["read", "update"]),
         allow.group("AdminUser").to(["read", "update", "delete", "create"]),
         allow.group("FirstTimeUser").to(["read"]),
       ]),

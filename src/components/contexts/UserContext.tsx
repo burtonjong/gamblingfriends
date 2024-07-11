@@ -27,6 +27,7 @@ export interface IUser {
   email?: string;
   signedIn?: boolean;
   role?: string;
+  completedRegistration?: boolean;
 }
 
 interface IUserReturn {
@@ -47,15 +48,15 @@ export function UserContextProvider({ children }: Props) {
       try {
         const user = await fetchAuthSession();
 
-        if (
-          (
-            user.tokens?.idToken?.payload["cognito:groups"] as UserType[]
-          )?.[0] === undefined
-        ) {
-          // Logout User if not in group
-          signOut();
-          console.error("User not in group");
-        }
+        // if (
+        //   (
+        //     user.tokens?.idToken?.payload["cognito:groups"] as UserType[]
+        //   )?.[0] === undefined
+        // ) {
+        //   // Logout User if not in group
+        //   signOut();
+        //   console.error("User not in group");
+        // }
         if (!user.userSub) {
           throw new Error("No user");
         }
@@ -80,6 +81,7 @@ export function UserContextProvider({ children }: Props) {
             firstName: response.data?.firstName ?? "",
             lastName: response.data?.lastName ?? "",
             role: response.data?.role ?? "",
+            completedRegistration: response.data?.completedRegistration,
           } as IUser;
         } catch (error) {
           console.error(error);

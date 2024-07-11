@@ -1,16 +1,14 @@
 /* tslint:disable */
-
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
-import * as APITypes from "./API";
 
+import * as APITypes from "./API";
 type GeneratedQuery<InputType, OutputType> = string & {
   __generatedQueryInput: InputType;
   __generatedQueryOutput: OutputType;
 };
 
-export const getSessionAttended =
-  /* GraphQL */ `query GetSessionAttended($id: ID!) {
+export const getSessionAttended = /* GraphQL */ `query GetSessionAttended($id: ID!) {
   getSessionAttended(id: $id) {
     createdAt
     date
@@ -19,11 +17,13 @@ export const getSessionAttended =
     sessionAttendedId
     updatedAt
     user {
+      completedRegistration
       createdAt
       email
       firstName
       id
       lastName
+      profileOwner
       role
       totalEarnings
       updatedAt
@@ -33,16 +33,18 @@ export const getSessionAttended =
   }
 }
 ` as GeneratedQuery<
-    APITypes.GetSessionAttendedQueryVariables,
-    APITypes.GetSessionAttendedQuery
-  >;
+  APITypes.GetSessionAttendedQueryVariables,
+  APITypes.GetSessionAttendedQuery
+>;
 export const getUser = /* GraphQL */ `query GetUser($id: ID!) {
   getUser(id: $id) {
+    completedRegistration
     createdAt
     email
     firstName
     id
     lastName
+    profileOwner
     role
     sessionsAttended {
       nextToken
@@ -100,11 +102,13 @@ export const listUsers = /* GraphQL */ `query ListUsers(
     sortDirection: $sortDirection
   ) {
     items {
+      completedRegistration
       createdAt
       email
       firstName
       id
       lastName
+      profileOwner
       role
       totalEarnings
       updatedAt
