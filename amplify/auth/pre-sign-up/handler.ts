@@ -3,9 +3,7 @@ import { generateClient } from "aws-amplify/data";
 import type { PreSignUpTriggerHandler } from "aws-lambda";
 
 import { type Schema } from "@/../../amplify/data/resource";
-import amplifyOutputs from "@/../../amplify_outputs.json";
-
-const { data } = amplifyOutputs;
+import { data } from "@/../../amplify_outputs.json";
 
 Amplify.configure(
   {
@@ -40,8 +38,8 @@ export const dataClient = generateClient<Schema>();
 
 export const handler: PreSignUpTriggerHandler = async (event) => {
   return await dataClient.models.User.create({
-    firstName: "",
-    lastName: "",
+    firstName: "Default",
+    lastName: "Name",
     role: "GuestUser",
     id: event.userName,
     email: event.request.userAttributes.email,
