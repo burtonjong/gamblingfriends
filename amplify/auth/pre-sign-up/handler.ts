@@ -3,7 +3,8 @@ import { generateClient } from "aws-amplify/data";
 import type { PreSignUpTriggerHandler } from "aws-lambda";
 
 import { type Schema } from "@/../../amplify/data/resource";
-import { data } from "@/../../amplify_outputs.json";
+
+import { createUser } from "./graphql/mutations";
 
 Amplify.configure(
   {
@@ -12,7 +13,6 @@ Amplify.configure(
         endpoint: process.env.AMPLIFY_DATA_GRAPHQL_ENDPOINT as string,
         region: process.env.AWS_REGION,
         defaultAuthMode: "identityPool",
-        modelIntrospection: data.model_introspection as any,
       },
     },
   },
@@ -37,15 +37,20 @@ Amplify.configure(
 export const dataClient = generateClient<Schema>();
 
 export const handler: PreSignUpTriggerHandler = async (event) => {
-  return await dataClient.models.User.create({
-    firstName: "",
-    lastName: "",
-    role: "GuestUser",
-    id: event.userName,
-    email: event.request.userAttributes.email,
-    totalEarnings: 0,
-    // profileOwner: `${event.userName}::${event.userName}`,
-  })
+  return await dataClient
+    .graphql({
+      query: createUser,
+      variables: {
+        input: {
+          firstName: "Default",
+          lastName: "Name",
+          role: "GuestUser",
+          id: event.userName,
+          email: event.request.userAttributes.email,
+          totalEarnings: 0,
+        },
+      },
+    })
     .then((user) => {
       if (user.errors) {
         throw new Error("Failed to create user in DB");
