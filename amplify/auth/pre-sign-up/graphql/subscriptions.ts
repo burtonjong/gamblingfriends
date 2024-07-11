@@ -1,14 +1,16 @@
 /* tslint:disable */
+
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
-
 import * as APITypes from "./API";
+
 type GeneratedSubscription<InputType, OutputType> = string & {
   __generatedSubscriptionInput: InputType;
   __generatedSubscriptionOutput: OutputType;
 };
 
-export const onCreateSessionAttended = /* GraphQL */ `subscription OnCreateSessionAttended(
+export const onCreateSessionAttended =
+  /* GraphQL */ `subscription OnCreateSessionAttended(
   $filter: ModelSubscriptionSessionAttendedFilterInput
 ) {
   onCreateSessionAttended(filter: $filter) {
@@ -35,9 +37,9 @@ export const onCreateSessionAttended = /* GraphQL */ `subscription OnCreateSessi
   }
 }
 ` as GeneratedSubscription<
-  APITypes.OnCreateSessionAttendedSubscriptionVariables,
-  APITypes.OnCreateSessionAttendedSubscription
->;
+    APITypes.OnCreateSessionAttendedSubscriptionVariables,
+    APITypes.OnCreateSessionAttendedSubscription
+  >;
 export const onCreateUser = /* GraphQL */ `subscription OnCreateUser(
   $filter: ModelSubscriptionUserFilterInput
   $profileOwner: String
@@ -64,7 +66,8 @@ export const onCreateUser = /* GraphQL */ `subscription OnCreateUser(
   APITypes.OnCreateUserSubscriptionVariables,
   APITypes.OnCreateUserSubscription
 >;
-export const onDeleteSessionAttended = /* GraphQL */ `subscription OnDeleteSessionAttended(
+export const onDeleteSessionAttended =
+  /* GraphQL */ `subscription OnDeleteSessionAttended(
   $filter: ModelSubscriptionSessionAttendedFilterInput
 ) {
   onDeleteSessionAttended(filter: $filter) {
@@ -91,9 +94,9 @@ export const onDeleteSessionAttended = /* GraphQL */ `subscription OnDeleteSessi
   }
 }
 ` as GeneratedSubscription<
-  APITypes.OnDeleteSessionAttendedSubscriptionVariables,
-  APITypes.OnDeleteSessionAttendedSubscription
->;
+    APITypes.OnDeleteSessionAttendedSubscriptionVariables,
+    APITypes.OnDeleteSessionAttendedSubscription
+  >;
 export const onDeleteUser = /* GraphQL */ `subscription OnDeleteUser(
   $filter: ModelSubscriptionUserFilterInput
   $profileOwner: String
@@ -120,7 +123,8 @@ export const onDeleteUser = /* GraphQL */ `subscription OnDeleteUser(
   APITypes.OnDeleteUserSubscriptionVariables,
   APITypes.OnDeleteUserSubscription
 >;
-export const onUpdateSessionAttended = /* GraphQL */ `subscription OnUpdateSessionAttended(
+export const onUpdateSessionAttended =
+  /* GraphQL */ `subscription OnUpdateSessionAttended(
   $filter: ModelSubscriptionSessionAttendedFilterInput
 ) {
   onUpdateSessionAttended(filter: $filter) {
@@ -147,9 +151,9 @@ export const onUpdateSessionAttended = /* GraphQL */ `subscription OnUpdateSessi
   }
 }
 ` as GeneratedSubscription<
-  APITypes.OnUpdateSessionAttendedSubscriptionVariables,
-  APITypes.OnUpdateSessionAttendedSubscription
->;
+    APITypes.OnUpdateSessionAttendedSubscriptionVariables,
+    APITypes.OnUpdateSessionAttendedSubscription
+  >;
 export const onUpdateUser = /* GraphQL */ `subscription OnUpdateUser(
   $filter: ModelSubscriptionUserFilterInput
   $profileOwner: String
