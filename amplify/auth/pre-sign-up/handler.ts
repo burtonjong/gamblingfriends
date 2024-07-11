@@ -3,7 +3,7 @@ import { generateClient } from "aws-amplify/data";
 import type { PreSignUpTriggerHandler } from "aws-lambda";
 
 import { type Schema } from "@/../../amplify/data/resource";
-import { data } from "@/../../amplify_outputs.json";
+import amplifyOutputs from "@/../../amplify_outputs.json";
 
 Amplify.configure(
   {
@@ -12,7 +12,7 @@ Amplify.configure(
         endpoint: process.env.AMPLIFY_DATA_GRAPHQL_ENDPOINT as string,
         region: process.env.AWS_REGION,
         defaultAuthMode: "identityPool",
-        modelIntrospection: data.model_introspection as any,
+        modelIntrospection: amplifyOutputs.data.model_introspection as any,
       },
     },
   },
