@@ -4,9 +4,10 @@ import { generateClient } from "aws-amplify/api";
 import { fetchAuthSession, signOut } from "aws-amplify/auth";
 import { Hub } from "aws-amplify/utils";
 import { useContext } from "react";
-import { type ReactNode, createContext, useEffect, useState } from "react";
+import { type ReactNode, createContext, useEffect } from "react";
 
 import { type Schema } from "@/../amplify/data/resource";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 interface Props {
   children: ReactNode | ReactNode[];
@@ -24,14 +25,13 @@ export interface IUser {
   firstName?: string;
   lastName?: string;
   email?: string;
-  populated: boolean;
   signedIn?: boolean;
   role?: string;
 }
 
 interface IUserReturn {
-  currentUser: IUser;
-  // setCurrentUser: (state: IUser) => void;
+  data: IUser;
+  isFetching: boolean;
 }
 
 const client = generateClient<Schema>();
@@ -39,18 +39,13 @@ const client = generateClient<Schema>();
 export const UserContext = createContext<IUserReturn>({} as IUserReturn);
 
 export function UserContextProvider({ children }: Props) {
-  const [currentUser, setCurrentUser] = useState<IUser>({
-    username: "",
-    type: UserType.FirstTimeUser,
-    populated: false,
-  });
+  const queryClient = useQueryClient();
 
-  // TO DO load other user info from table
-  useEffect(() => {
-    async function currentAuthenticatedUser() {
+  const { data, isFetching } = useQuery({
+    queryKey: ["Users"],
+    queryFn: async () => {
       try {
         const user = await fetchAuthSession();
-        console.log(user);
 
         if (
           (
@@ -64,7 +59,6 @@ export function UserContextProvider({ children }: Props) {
         if (!user.userSub) {
           throw new Error("No user");
         }
-        console.log(user.userSub);
 
         try {
           const response = await client.models.User.get({
@@ -77,17 +71,16 @@ export function UserContextProvider({ children }: Props) {
             console.error("User not in DB");
           }
 
-          setCurrentUser({
+          return {
             username: user.tokens?.accessToken.payload.username as string,
             type: (
               user.tokens?.idToken?.payload["cognito:groups"] as UserType[]
             )?.[0],
-            populated: true,
             email: response.data?.email ?? "",
             firstName: response.data?.firstName ?? "",
             lastName: response.data?.lastName ?? "",
             role: response.data?.role ?? "",
-          });
+          } as IUser;
         } catch (error) {
           console.error(error);
         }
@@ -95,33 +88,35 @@ export function UserContextProvider({ children }: Props) {
       } catch (error) {
         if (String(error).includes("No user")) {
           console.info("Not Logged in");
-          setCurrentUser({
+          return {
             username: "",
             type: UserType.FirstTimeUser,
-            populated: true,
             role: UserType.FirstTimeUser,
-          });
+          } as IUser;
         } else {
           console.error(error);
         }
       }
-    }
+    },
+  });
 
-    currentAuthenticatedUser();
-
+  // TO DO load other user info from table
+  useEffect(() => {
     const hubListenerCancel = Hub.listen("auth", (data) => {
       switch (data.payload.event) {
         case "signedIn":
-          currentAuthenticatedUser();
+          queryClient.invalidateQueries({
+            queryKey: ["Users"],
+            exact: true,
+          });
           console.log("Signed In");
           break;
         case "signedOut":
-          setCurrentUser({
+          queryClient.setQueryData(["Users"], {
             username: "",
             type: UserType.FirstTimeUser,
-            populated: true,
             role: UserType.FirstTimeUser,
-          });
+          } as IUser);
           console.log("Signed Out");
           break;
       }
@@ -133,7 +128,12 @@ export function UserContextProvider({ children }: Props) {
     };
   }, []);
   return (
-    <UserContext.Provider value={{ currentUser }}>
+    <UserContext.Provider
+      value={{
+        data: data || { username: "", type: UserType.FirstTimeUser },
+        isFetching,
+      }}
+    >
       {children}
     </UserContext.Provider>
   );

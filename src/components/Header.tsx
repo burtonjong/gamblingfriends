@@ -15,7 +15,7 @@ export default function Header({
 }) {
   const [authCheck, setAuthCheck] = useState(isSignedIn);
 
-  const user = useUser().currentUser;
+  const data = useUser().data;
 
   const router = useRouter();
   useEffect(() => {
@@ -45,10 +45,6 @@ export default function Header({
     }
   };
 
-  useEffect(() => {
-    console.log("isSignedIn: ", isSignedIn);
-  }, [authCheck]);
-
   const defaultRoutes = [
     { name: "Spreadsheet", href: "/spreadsheet", loggedIn: true },
     { name: "Home", href: "/home", loggedIn: true },
@@ -62,13 +58,13 @@ export default function Header({
 
   let renderedRoutes = loggedInRoutes;
 
-  if (user.role !== "AdminUser") {
+  if (data && data.type !== "AdminUser") {
     renderedRoutes = loggedInRoutes.filter(
       (route) => route.name !== "Admin Panel",
     );
   }
 
-  console.log(user);
+  console.log(data);
 
   return (
     <div className="flex h-24 flex-row items-center justify-evenly bg-slate-500">
