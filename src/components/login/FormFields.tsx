@@ -1,5 +1,6 @@
 import { generateClient } from "aws-amplify/api";
 import type { AuthUser } from "aws-amplify/auth";
+import { uploadData } from "aws-amplify/storage";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -10,6 +11,8 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import FormFieldButtons from "./FormFieldButtons";
 
 const client = generateClient<Schema>();
+
+type FileAndUser = Schema["User"]["type"] & { file: File };
 export default function PersonalFormFields({ user }: { user: AuthUser }) {
   const router = useRouter();
   const { isPending, isError, data } = useQuery({
@@ -19,29 +22,51 @@ export default function PersonalFormFields({ user }: { user: AuthUser }) {
     },
   });
   const userMutation = useMutation({
-    mutationFn: async (input: Schema["User"]["type"]) => {
-      await client.models.User.update({
-        id: user.userId,
-        firstName: input.firstName,
-        lastName: input.lastName,
-        completedRegistration: true,
-      });
+    mutationFn: async (input: FileAndUser) => {
+      try {
+        await uploadData({
+          path: `picture-submissions/${input.file.name}`,
+          data: input.file,
+        });
+
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { file, ...userDataWithoutFile } = input;
+
+        await client.models.User.update({
+          completedRegistration: true,
+          ...userDataWithoutFile,
+        });
+      } catch (error) {
+        console.error(error);
+        throw new Error("Failed to update user or upload file");
+      }
     },
     onSuccess: () => {
       // TODO: ADD TOAST
       router.push("/home");
     },
   });
-  const [formState, setFormState] = useState<Schema["User"]["type"]>({
+  const [formState, setFormState] = useState<FileAndUser>({
     id: user?.userId,
-  } as Schema["User"]["type"]);
+  } as FileAndUser);
   const submitForm = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     userMutation.mutate(formState);
   };
   const updateForm = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    const { name, value } = e.target;
-    setFormState((prevState) => ({ ...prevState, [name]: value }));
+    const { name, type, value, files } = e.target;
+
+    if (type === "file" && files) {
+      const file = files[0];
+      if (file && file.type.startsWith("image/")) {
+        setFormState((prevState) => ({ ...prevState, [name]: file }));
+      } else {
+        setFormState((prevState) => ({ ...prevState, [name]: null }));
+        alert("The file is not an image.");
+      }
+    } else {
+      setFormState((prevState) => ({ ...prevState, [name]: value }));
+    }
   };
 
   if (isPending) {
@@ -92,6 +117,18 @@ export default function PersonalFormFields({ user }: { user: AuthUser }) {
               value={formState?.lastName ?? ""}
               onChange={(e) => updateForm(e)}
             />
+          </div>
+          <div className="flex w-1/2 flex-col gap-2">
+            <label>
+              Profile Picture
+              <input
+                type="file"
+                name="image"
+                required
+                accept="image/*"
+                onChange={(e) => updateForm(e)}
+              />
+            </label>
           </div>
         </div>
       </div>
