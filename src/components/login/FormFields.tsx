@@ -26,7 +26,7 @@ export default function PersonalFormFields({ user }: { user: AuthUser }) {
     mutationFn: async (input: FileAndUser) => {
       try {
         await uploadData({
-          path: `picture-submissions/${input.image.name}`,
+          path: `public/${input.id}/`,
           data: input.image,
         });
 
