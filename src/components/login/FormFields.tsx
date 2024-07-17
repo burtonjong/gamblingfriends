@@ -12,7 +12,7 @@ import FormFieldButtons from "./FormFieldButtons";
 
 const client = generateClient<Schema>();
 
-type FileAndUser = Schema["User"]["type"] & { file: File };
+type FileAndUser = Schema["User"]["type"] & { image: File };
 export default function PersonalFormFields({ user }: { user: AuthUser }) {
   const router = useRouter();
   const { isPending, isError, data } = useQuery({
@@ -21,16 +21,17 @@ export default function PersonalFormFields({ user }: { user: AuthUser }) {
       return (await client.models.User.get({ id: user.userId as string })).data;
     },
   });
+
   const userMutation = useMutation({
     mutationFn: async (input: FileAndUser) => {
       try {
         await uploadData({
-          path: `picture-submissions/${input.file.name}`,
-          data: input.file,
+          path: `picture-submissions/${input.image.name}`,
+          data: input.image,
         });
 
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const { file, ...userDataWithoutFile } = input;
+        const { image, ...userDataWithoutFile } = input;
 
         await client.models.User.update({
           completedRegistration: true,
