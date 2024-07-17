@@ -49,6 +49,7 @@ export default function Header({
     { name: "Home", href: "/home", loggedIn: true },
     { name: "Planner", href: "/planner", loggedIn: true },
     { name: "Admin Panel", href: "/admin", loggedIn: true },
+    { name: "User Profile", href: "/user-profile", loggedIn: true },
   ];
 
   const loggedInRoutes = defaultRoutes.filter(

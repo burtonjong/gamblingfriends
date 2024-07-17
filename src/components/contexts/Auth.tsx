@@ -11,9 +11,9 @@ import {
   QueryClientProvider,
 } from "@tanstack/react-query";
 
-import config from "../../../amplify_outputs.json";
+import outputs from "../../../amplify_outputs.json";
 
-Amplify.configure(config, { ssr: true });
+Amplify.configure(outputs, { ssr: true });
 
 export default function AuthQueryProvider({
   children,
