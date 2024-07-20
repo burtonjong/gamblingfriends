@@ -18,7 +18,7 @@ export default function CountdownTimer() {
   const [minutes, setMinutes] = useState(0);
   const [seconds, setSeconds] = useState(0);
 
-  const { data: timer = [], isFetching } = useQuery<Timer[]>({
+  const { data: timer = [] } = useQuery<Timer[]>({
     initialDataUpdatedAt: 0,
     queryKey: ["Timers", {}],
     queryFn: async () => {

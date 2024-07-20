@@ -29,7 +29,7 @@ export default function SetTimer() {
   const queryClient = useQueryClient();
 
   //Get next session date from database
-  const { data: timer = [], isFetching } = useQuery<Timer[]>({
+  const { data: timer = [] } = useQuery<Timer[]>({
     initialDataUpdatedAt: 0,
     queryKey: ["Timers", {}],
     queryFn: async () => {
@@ -123,7 +123,7 @@ export default function SetTimer() {
               ? handleSubmit(createTimer)
               : handleSubmit(editTimer)
           }
-          className="flex w-2/5 w-full flex-col justify-center bg-gray-100 p-4"
+          className="flex w-full flex-col justify-center bg-gray-100 p-4"
         >
           <div>
             <label className="">Date</label>
@@ -195,7 +195,7 @@ export default function SetTimer() {
           </div>
         </form>
       ) : (
-        <div className="flex w-2/5 w-full flex-col justify-center bg-gray-100 p-4">
+        <div className="flex w-full flex-col justify-center bg-gray-100 p-4">
           <h1 className="m-2 text-2xl font-bold">The next sessions date is:</h1>
           <div className="m-2">
             {timer[0]?.nextSessionDate + " " + timer[0]?.nextSessionTime}
