@@ -12,14 +12,14 @@ const client = generateClient<Schema>();
 
 export default function CountdownTimer() {
   const [gambleTime, setGambleTime] = useState(false);
-  const [noTimer, setNoTimer] = useState(true);
   const [days, setDays] = useState(0);
   const [hours, setHours] = useState(0);
   const [minutes, setMinutes] = useState(0);
   const [seconds, setSeconds] = useState(0);
 
-  const { data: timer = [] } = useQuery<Timer[]>({
+  const { data: timer = [], isFetching } = useQuery<Timer[]>({
     initialDataUpdatedAt: 0,
+    initialData: [] as Schema["Timer"]["type"][],
     queryKey: ["Timers", {}],
     queryFn: async () => {
       const response = await client.models.Timer.list();
@@ -29,9 +29,9 @@ export default function CountdownTimer() {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      if (timer.length !== 0) {
-        setNoTimer(false);
-
+      if (timer.length === 0) {
+        setGambleTime(false);
+      } else {
         const [year, month, day] = timer[0]
           .nextSessionDate!.split("-")
           .map(Number);
@@ -39,7 +39,7 @@ export default function CountdownTimer() {
           .nextSessionTime!.split(":")
           .map(Number);
         const target = new Date(year, month - 1, day, hours, minutes);
-
+        console.log(year, month, day);
         const now = new Date();
         const difference = target.getTime() - now.getTime();
 
@@ -56,16 +56,20 @@ export default function CountdownTimer() {
 
         if (d <= 0 && h <= 0 && m <= 0 && s <= 0) {
           setGambleTime(true);
+        } else {
+          setGambleTime(false);
         }
       }
     }, 1000);
     return () => clearInterval(interval);
-  }, []);
+  }, [timer]);
 
   return (
     <>
-      {gambleTime || noTimer ? (
-        <div>{noTimer ? "No date set yet" : "Time to gamble!"}</div>
+      {isFetching ? (
+        "Loading timer"
+      ) : gambleTime || timer.length === 0 ? (
+        <div>{timer.length === 0 ? "No date set yet" : "Time to gamble!"}</div>
       ) : (
         <div className="count-down-main flex size-full items-start justify-center gap-4">
           <div className="timer w-16">

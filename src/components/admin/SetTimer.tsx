@@ -30,6 +30,7 @@ export default function SetTimer() {
 
   //Get next session date from database
   const { data: timer = [] } = useQuery<Timer[]>({
+    initialData: [] as Schema["Timer"]["type"][],
     initialDataUpdatedAt: 0,
     queryKey: ["Timers", {}],
     queryFn: async () => {
@@ -169,14 +170,6 @@ export default function SetTimer() {
                 toggleEdit
                   ? () => {
                       setToggleEdit(false);
-                      setValue(
-                        "nextSessionDate",
-                        timer[0]?.nextSessionDate ?? "",
-                      );
-                      setValue(
-                        "nextSessionTime",
-                        timer[0].nextSessionTime ?? "",
-                      );
                     }
                   : () => {
                       reset();
@@ -208,7 +201,11 @@ export default function SetTimer() {
               Delete
             </button>
             <button
-              onClick={() => setToggleEdit(true)}
+              onClick={() => {
+                setToggleEdit(true);
+                setValue("nextSessionDate", timer[0]?.nextSessionDate ?? "");
+                setValue("nextSessionTime", timer[0].nextSessionTime ?? "");
+              }}
               className="w-1/2 rounded-r-lg bg-blue-600 p-2 text-white hover:bg-blue-700"
             >
               Edit
