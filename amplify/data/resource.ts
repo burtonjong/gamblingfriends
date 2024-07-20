@@ -51,7 +51,7 @@ const schema = a
         nextSessionDate: a.string(),
         nextSessionTime: a.string(),
       })
-      .authorization((allow)=>[
+      .authorization((allow) => [
         allow.group("GuestUser").to(["read"]),
         allow.group("AdminUser").to(["read", "update", "delete", "create"]),
       ]),
