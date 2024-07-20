@@ -1,33 +1,62 @@
 "use client";
 
+import { generateClient } from "aws-amplify/api";
 import { useEffect, useState } from "react";
+
+import { useQuery } from "@tanstack/react-query";
+
+import type { Schema } from "../../../amplify/data/resource";
+
+type Timer = Schema["Timer"]["type"];
+const client = generateClient<Schema>();
 
 export default function CountdownTimer() {
   const [gambleTime, setGambleTime] = useState(false);
+  const [noTimer, setNoTimer] = useState(true);
   const [days, setDays] = useState(0);
   const [hours, setHours] = useState(0);
   const [minutes, setMinutes] = useState(0);
   const [seconds, setSeconds] = useState(0);
 
+  const { data: timer = [], isFetching } = useQuery<Timer[]>({
+    initialDataUpdatedAt: 0,
+    queryKey: ["Timers", {}],
+    queryFn: async () => {
+      const response = await client.models.Timer.list();
+      return response.data;
+    },
+  });
+
   useEffect(() => {
-    const target = new Date("07/04/2024 09:42 PM");
     const interval = setInterval(() => {
-      const now = new Date();
-      const difference = target.getTime() - now.getTime();
+      if (timer.length !== 0) {
+        setNoTimer(false);
 
-      const d = Math.floor(difference / (1000 * 60 * 60 * 24));
-      setDays(d);
-      const h = Math.floor(
-        (difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60),
-      );
-      setHours(h);
-      const m = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
-      setMinutes(m);
-      const s = Math.floor((difference % (1000 * 60)) / 1000);
-      setSeconds(s);
+        const [year, month, day] = timer[0]
+          .nextSessionDate!.split("-")
+          .map(Number);
+        const [hours, minutes] = timer[0]
+          .nextSessionTime!.split(":")
+          .map(Number);
+        const target = new Date(year, month - 1, day, hours, minutes);
 
-      if (d <= 0 && h <= 0 && m <= 0 && s <= 0) {
-        setGambleTime(true);
+        const now = new Date();
+        const difference = target.getTime() - now.getTime();
+
+        const d = Math.floor(difference / (1000 * 60 * 60 * 24));
+        setDays(d);
+        const h = Math.floor(
+          (difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60),
+        );
+        setHours(h);
+        const m = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+        setMinutes(m);
+        const s = Math.floor((difference % (1000 * 60)) / 1000);
+        setSeconds(s);
+
+        if (d <= 0 && h <= 0 && m <= 0 && s <= 0) {
+          setGambleTime(true);
+        }
       }
     }, 1000);
     return () => clearInterval(interval);
@@ -35,8 +64,8 @@ export default function CountdownTimer() {
 
   return (
     <>
-      {gambleTime ? (
-        <div>Time to gamble!</div>
+      {gambleTime || noTimer ? (
+        <div>{noTimer ? "No date set yet" : "Time to gamble!"}</div>
       ) : (
         <div className="count-down-main flex size-full items-start justify-center gap-4">
           <div className="timer w-16">
