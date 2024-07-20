@@ -45,6 +45,16 @@ const schema = a
         allow.group("GuestUser").to(["read"]),
         allow.group("AdminUser").to(["read", "update", "delete", "create"]),
       ]),
+    Timer: a
+      .model({
+        id: a.id().required(),
+        nextSessionDate: a.string(),
+        nextSessionTime: a.string(),
+      })
+      .authorization((allow) => [
+        allow.group("GuestUser").to(["read"]),
+        allow.group("AdminUser").to(["read", "update", "delete", "create"]),
+      ]),
   })
   .authorization((allow) => [
     allow.resource(preSignUp).to(["mutate"]),
