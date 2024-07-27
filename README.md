@@ -1,6 +1,6 @@
-This is a [Next.js](https://nextjs.org/) project
+A fullstack project using Amplify GEN 2.
 
-A preview deployment can be found at: spreadsheet-planner.vercel.app
+Authenticated logins, user authentication and roles, etc.
 
 ## Note
 
