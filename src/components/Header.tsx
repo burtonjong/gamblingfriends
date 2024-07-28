@@ -47,7 +47,6 @@ export default function Header({
   const defaultRoutes = [
     { name: "Spreadsheet", href: "/spreadsheet", loggedIn: true },
     { name: "Home", href: "/home", loggedIn: true },
-    { name: "Planner", href: "/planner", loggedIn: true },
     { name: "Admin Panel", href: "/admin", loggedIn: true },
     { name: "User Profile", href: "/user-profile", loggedIn: true },
   ];
