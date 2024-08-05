@@ -134,6 +134,7 @@ export default function AdminForm() {
               <label>Earnings</label>
               <input
                 type="number"
+                step="0.01"
                 {...register("earningsThatSession", { required: true })}
                 className="w-full rounded border border-gray-300 p-2"
               />
