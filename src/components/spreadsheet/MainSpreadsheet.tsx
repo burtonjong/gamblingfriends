@@ -1,7 +1,6 @@
 "use client";
 
 import { generateClient } from "aws-amplify/data";
-import { useState } from "react";
 import type { TableColumn } from "react-data-table-component";
 import DataTable from "react-data-table-component";
 
@@ -36,26 +35,7 @@ const t1: TableColumn<{
   },
 ];
 
-// The second table coloumns and titles
-/*const t2: TableColumn<{
-  date: string;
-  peopleAtSession: number;
-}>[] = [
-  {
-    name: "Date",
-    selector: (row) => row.date,
-    sortable: true,
-  },
-  {
-    name: "People At Session",
-    selector: (row) => row.peopleAtSession,
-    sortable: true,
-  },
-];*/
-
 export default function MainSpreadsheet() {
-  const [showTable, toggleShowTable] = useState(true);
-
   const { data, isFetching } = useQuery({
     initialData: [] as Schema["User"]["type"][],
     initialDataUpdatedAt: 0,
@@ -79,44 +59,18 @@ export default function MainSpreadsheet() {
           </div>
         ) : (
           <>
-            <div className="flex flex-row gap-4">
-              <button className="" onClick={() => toggleShowTable(true)}>
-                Home
-              </button>
-              <button className="" onClick={() => toggleShowTable(false)}>
-                Sessions Attended
-              </button>
-            </div>
             <div>
-              {showTable ? (
-                <DataTable
-                  columns={t1}
-                  data={
-                    data?.map((user) => ({
-                      gamblerName: user.firstName + " " + user.lastName,
-                      totalEarnings: user.totalEarnings,
-                      sesssionsAttend: user.sessionsAttended.length,
-                    })) || []
-                  }
-                  pagination
-                />
-              ) : (
-                <>
-                  {/* For session date and people at session when we fix
-                    <DataTable
-                      columns={t2}
-                      data={
-                        data?.map((user) => ({
-                          date: user.sessionsAttended
-                            .map((session) => session.date)
-                            .join(", "),
-                        })) || []
-                      }
-                      pagination
-                    />
-                  */}
-                </>
-              )}
+              <DataTable
+                columns={t1}
+                data={
+                  data?.map((user) => ({
+                    gamblerName: user.firstName + " " + user.lastName,
+                    totalEarnings: user.totalEarnings,
+                    sesssionsAttend: user.sessionsAttended.length,
+                  })) || []
+                }
+                pagination
+              />
             </div>
           </>
         )}
