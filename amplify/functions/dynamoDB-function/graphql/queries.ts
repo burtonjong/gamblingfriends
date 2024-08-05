@@ -1,16 +1,14 @@
 /* tslint:disable */
-
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
-import * as APITypes from "./API";
 
+import * as APITypes from "./API";
 type GeneratedQuery<InputType, OutputType> = string & {
   __generatedQueryInput: InputType;
   __generatedQueryOutput: OutputType;
 };
 
-export const getSessionAttended =
-  /* GraphQL */ `query GetSessionAttended($id: ID!) {
+export const getSessionAttended = /* GraphQL */ `query GetSessionAttended($id: ID!) {
   getSessionAttended(id: $id) {
     createdAt
     date
@@ -19,11 +17,14 @@ export const getSessionAttended =
     sessionAttendedId
     updatedAt
     user {
+      completedRegistration
       createdAt
       email
       firstName
       id
       lastName
+      numberSessionsAttended
+      profileOwner
       role
       totalEarnings
       updatedAt
@@ -33,16 +34,30 @@ export const getSessionAttended =
   }
 }
 ` as GeneratedQuery<
-    APITypes.GetSessionAttendedQueryVariables,
-    APITypes.GetSessionAttendedQuery
-  >;
+  APITypes.GetSessionAttendedQueryVariables,
+  APITypes.GetSessionAttendedQuery
+>;
+export const getTimer = /* GraphQL */ `query GetTimer($id: ID!) {
+  getTimer(id: $id) {
+    createdAt
+    id
+    nextSessionDate
+    nextSessionTime
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedQuery<APITypes.GetTimerQueryVariables, APITypes.GetTimerQuery>;
 export const getUser = /* GraphQL */ `query GetUser($id: ID!) {
   getUser(id: $id) {
+    completedRegistration
     createdAt
     email
     firstName
     id
     lastName
+    numberSessionsAttended
+    profileOwner
     role
     sessionsAttended {
       nextToken
@@ -85,6 +100,36 @@ export const listSessionAttendeds = /* GraphQL */ `query ListSessionAttendeds(
   APITypes.ListSessionAttendedsQueryVariables,
   APITypes.ListSessionAttendedsQuery
 >;
+export const listTimers = /* GraphQL */ `query ListTimers(
+  $filter: ModelTimerFilterInput
+  $id: ID
+  $limit: Int
+  $nextToken: String
+  $sortDirection: ModelSortDirection
+) {
+  listTimers(
+    filter: $filter
+    id: $id
+    limit: $limit
+    nextToken: $nextToken
+    sortDirection: $sortDirection
+  ) {
+    items {
+      createdAt
+      id
+      nextSessionDate
+      nextSessionTime
+      updatedAt
+      __typename
+    }
+    nextToken
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.ListTimersQueryVariables,
+  APITypes.ListTimersQuery
+>;
 export const listUsers = /* GraphQL */ `query ListUsers(
   $filter: ModelUserFilterInput
   $id: ID
@@ -100,11 +145,14 @@ export const listUsers = /* GraphQL */ `query ListUsers(
     sortDirection: $sortDirection
   ) {
     items {
+      completedRegistration
       createdAt
       email
       firstName
       id
       lastName
+      numberSessionsAttended
+      profileOwner
       role
       totalEarnings
       updatedAt

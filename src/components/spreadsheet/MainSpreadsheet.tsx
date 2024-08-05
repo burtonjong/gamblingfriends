@@ -16,7 +16,7 @@ const client = generateClient<Schema>();
 const t1: TableColumn<{
   gamblerName: string;
   totalEarnings: Nullable<number> | undefined;
-  sesssionsAttend: number;
+  numberSessionsAttended: Nullable<number> | undefined;
 }>[] = [
   {
     name: "Name",
@@ -30,7 +30,7 @@ const t1: TableColumn<{
   },
   {
     name: "Sessions Attended",
-    selector: (row) => row.sesssionsAttend,
+    selector: (row) => row.numberSessionsAttended ?? 0,
     sortable: true,
   },
 ];
@@ -66,7 +66,7 @@ export default function MainSpreadsheet() {
                   data?.map((user) => ({
                     gamblerName: user.firstName + " " + user.lastName,
                     totalEarnings: user.totalEarnings,
-                    sesssionsAttend: user.sessionsAttended.length,
+                    numberSessionsAttended: user.numberSessionsAttended,
                   })) || []
                 }
                 pagination

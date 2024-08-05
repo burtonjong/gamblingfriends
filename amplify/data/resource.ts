@@ -20,6 +20,7 @@ const schema = a
         role: a.string().default("FirstTimeUser"),
         totalEarnings: a.float(),
         completedRegistration: a.boolean(),
+        numberSessionsAttended: a.integer(),
         profileOwner: a
           .string()
           .authorization((allow) => [

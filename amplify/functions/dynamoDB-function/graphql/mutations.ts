@@ -1,16 +1,14 @@
 /* tslint:disable */
-
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
-import * as APITypes from "./API";
 
+import * as APITypes from "./API";
 type GeneratedMutation<InputType, OutputType> = string & {
   __generatedMutationInput: InputType;
   __generatedMutationOutput: OutputType;
 };
 
-export const createSessionAttended =
-  /* GraphQL */ `mutation CreateSessionAttended(
+export const createSessionAttended = /* GraphQL */ `mutation CreateSessionAttended(
   $condition: ModelSessionAttendedConditionInput
   $input: CreateSessionAttendedInput!
 ) {
@@ -22,11 +20,14 @@ export const createSessionAttended =
     sessionAttendedId
     updatedAt
     user {
+      completedRegistration
       createdAt
       email
       firstName
       id
       lastName
+      numberSessionsAttended
+      profileOwner
       role
       totalEarnings
       updatedAt
@@ -36,19 +37,39 @@ export const createSessionAttended =
   }
 }
 ` as GeneratedMutation<
-    APITypes.CreateSessionAttendedMutationVariables,
-    APITypes.CreateSessionAttendedMutation
-  >;
+  APITypes.CreateSessionAttendedMutationVariables,
+  APITypes.CreateSessionAttendedMutation
+>;
+export const createTimer = /* GraphQL */ `mutation CreateTimer(
+  $condition: ModelTimerConditionInput
+  $input: CreateTimerInput!
+) {
+  createTimer(condition: $condition, input: $input) {
+    createdAt
+    id
+    nextSessionDate
+    nextSessionTime
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.CreateTimerMutationVariables,
+  APITypes.CreateTimerMutation
+>;
 export const createUser = /* GraphQL */ `mutation CreateUser(
   $condition: ModelUserConditionInput
   $input: CreateUserInput!
 ) {
   createUser(condition: $condition, input: $input) {
+    completedRegistration
     createdAt
     email
     firstName
     id
     lastName
+    numberSessionsAttended
+    profileOwner
     role
     sessionsAttended {
       nextToken
@@ -63,8 +84,7 @@ export const createUser = /* GraphQL */ `mutation CreateUser(
   APITypes.CreateUserMutationVariables,
   APITypes.CreateUserMutation
 >;
-export const deleteSessionAttended =
-  /* GraphQL */ `mutation DeleteSessionAttended(
+export const deleteSessionAttended = /* GraphQL */ `mutation DeleteSessionAttended(
   $condition: ModelSessionAttendedConditionInput
   $input: DeleteSessionAttendedInput!
 ) {
@@ -76,11 +96,14 @@ export const deleteSessionAttended =
     sessionAttendedId
     updatedAt
     user {
+      completedRegistration
       createdAt
       email
       firstName
       id
       lastName
+      numberSessionsAttended
+      profileOwner
       role
       totalEarnings
       updatedAt
@@ -90,19 +113,39 @@ export const deleteSessionAttended =
   }
 }
 ` as GeneratedMutation<
-    APITypes.DeleteSessionAttendedMutationVariables,
-    APITypes.DeleteSessionAttendedMutation
-  >;
+  APITypes.DeleteSessionAttendedMutationVariables,
+  APITypes.DeleteSessionAttendedMutation
+>;
+export const deleteTimer = /* GraphQL */ `mutation DeleteTimer(
+  $condition: ModelTimerConditionInput
+  $input: DeleteTimerInput!
+) {
+  deleteTimer(condition: $condition, input: $input) {
+    createdAt
+    id
+    nextSessionDate
+    nextSessionTime
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.DeleteTimerMutationVariables,
+  APITypes.DeleteTimerMutation
+>;
 export const deleteUser = /* GraphQL */ `mutation DeleteUser(
   $condition: ModelUserConditionInput
   $input: DeleteUserInput!
 ) {
   deleteUser(condition: $condition, input: $input) {
+    completedRegistration
     createdAt
     email
     firstName
     id
     lastName
+    numberSessionsAttended
+    profileOwner
     role
     sessionsAttended {
       nextToken
@@ -117,8 +160,7 @@ export const deleteUser = /* GraphQL */ `mutation DeleteUser(
   APITypes.DeleteUserMutationVariables,
   APITypes.DeleteUserMutation
 >;
-export const updateSessionAttended =
-  /* GraphQL */ `mutation UpdateSessionAttended(
+export const updateSessionAttended = /* GraphQL */ `mutation UpdateSessionAttended(
   $condition: ModelSessionAttendedConditionInput
   $input: UpdateSessionAttendedInput!
 ) {
@@ -130,11 +172,14 @@ export const updateSessionAttended =
     sessionAttendedId
     updatedAt
     user {
+      completedRegistration
       createdAt
       email
       firstName
       id
       lastName
+      numberSessionsAttended
+      profileOwner
       role
       totalEarnings
       updatedAt
@@ -144,19 +189,39 @@ export const updateSessionAttended =
   }
 }
 ` as GeneratedMutation<
-    APITypes.UpdateSessionAttendedMutationVariables,
-    APITypes.UpdateSessionAttendedMutation
-  >;
+  APITypes.UpdateSessionAttendedMutationVariables,
+  APITypes.UpdateSessionAttendedMutation
+>;
+export const updateTimer = /* GraphQL */ `mutation UpdateTimer(
+  $condition: ModelTimerConditionInput
+  $input: UpdateTimerInput!
+) {
+  updateTimer(condition: $condition, input: $input) {
+    createdAt
+    id
+    nextSessionDate
+    nextSessionTime
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.UpdateTimerMutationVariables,
+  APITypes.UpdateTimerMutation
+>;
 export const updateUser = /* GraphQL */ `mutation UpdateUser(
   $condition: ModelUserConditionInput
   $input: UpdateUserInput!
 ) {
   updateUser(condition: $condition, input: $input) {
+    completedRegistration
     createdAt
     email
     firstName
     id
     lastName
+    numberSessionsAttended
+    profileOwner
     role
     sessionsAttended {
       nextToken

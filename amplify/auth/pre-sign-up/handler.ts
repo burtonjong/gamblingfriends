@@ -48,6 +48,7 @@ export const handler: PreSignUpTriggerHandler = async (event) => {
           id: event.userName,
           email: event.request.userAttributes.email,
           totalEarnings: 0,
+          numberSessionsAttended: 0,
           completedRegistration: false,
           profileOwner: `${event.userName}::${event.userName}`,
         },

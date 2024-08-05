@@ -57,7 +57,7 @@ export const handler: DynamoDBStreamHandler = async (event) => {
 
       logger.info(`New Image: ${JSON.stringify(newImage)}`);
 
-      if (record.eventName === "INSERT" || record.eventName === "MODIFY") {
+      if (record.eventName === "INSERT") {
         const userId = newImage.sessionAttendedId as string;
         const earnings = newImage.earningsThatSession;
 
@@ -76,12 +76,16 @@ export const handler: DynamoDBStreamHandler = async (event) => {
           logger.info(`User: ${user}`);
           logger.info(`Total Profit: ${totalEarnings}`);
 
+          const numberSessionsAttended =
+            (user.data.getUser?.numberSessionsAttended || 0) + 1;
+
           const response = await dataClient.graphql({
             query: updateUser,
             variables: {
               input: {
                 id: userId,
                 totalEarnings: totalEarnings,
+                numberSessionsAttended: numberSessionsAttended,
               },
             },
           });
@@ -108,6 +112,48 @@ export const handler: DynamoDBStreamHandler = async (event) => {
           const totalEarnings =
             (user.data.getUser?.totalEarnings || 0) - profit;
 
+          const numberSessionsAttended =
+            (user.data.getUser?.numberSessionsAttended || 0) - 1;
+
+          const response = await dataClient.graphql({
+            query: updateUser,
+            variables: {
+              input: {
+                id: userId,
+                totalEarnings: totalEarnings,
+                numberSessionsAttended: numberSessionsAttended,
+              },
+            },
+          });
+          logger.info(
+            `User updated after deletion of session: ${JSON.stringify(response)}`,
+          );
+        } catch (error) {
+          logger.error(`Error fetching user: ${JSON.stringify(error)}`);
+        }
+      } else if (record.eventName === "MODIFY") {
+        const oldImage = unmarshall(
+          record.dynamodb.OldImage as Record<string, AttributeValue>,
+        );
+        const newImage = unmarshall(
+          record.dynamodb.NewImage as Record<string, AttributeValue>,
+        );
+
+        const oldProfit = oldImage.earningsThatSession;
+        const newProfit = newImage.earningsThatSession;
+        const userId = newImage.sessionAttendedId as string;
+
+        try {
+          const user = await dataClient.graphql({
+            query: getUser,
+            variables: {
+              id: userId,
+            },
+          });
+
+          const totalEarnings =
+            (user.data.getUser?.totalEarnings || 0) - oldProfit + newProfit;
+
           const response = await dataClient.graphql({
             query: updateUser,
             variables: {
@@ -118,7 +164,7 @@ export const handler: DynamoDBStreamHandler = async (event) => {
             },
           });
           logger.info(
-            `User updated after deletion of session: ${JSON.stringify(response)}`,
+            `User updated after modification of session: ${JSON.stringify(response)}`,
           );
         } catch (error) {
           logger.error(`Error fetching user: ${JSON.stringify(error)}`);
