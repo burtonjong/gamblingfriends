@@ -31,20 +31,7 @@ export default function UserProfile() {
   const imageUploadPath = `public/${data?.firstName}${data?.lastName}/`;
 
   const processFile = async ({ file }: { file: File }) => {
-    const fileExtension = file.name.split(".").pop();
-
-    return file
-      .arrayBuffer()
-      .then((filebuffer: BufferSource) =>
-        window.crypto.subtle.digest("SHA-1", filebuffer),
-      )
-      .then((hashBuffer) => {
-        const hashArray = Array.from(new Uint8Array(hashBuffer));
-        const hashHex = hashArray
-          .map((a) => a.toString(16).padStart(2, "0"))
-          .join("");
-        return { file, key: `${hashHex}.${fileExtension}` };
-      });
+    return { file, key: `profile.png` };
   };
 
   return (
