@@ -39,8 +39,8 @@ export default function UserProfile() {
             <div className="size-36">
               <StorageImage
                 alt="cat"
-                path="public/cat.png"
-                fallbackSrc="public/profile.svg"
+                path={`public/${data?.id}/profile.png`}
+                fallbackSrc="public/profile.png"
               />
             </div>
           </div>
@@ -57,7 +57,7 @@ export default function UserProfile() {
               </Button>
               <StorageManager
                 acceptedFileTypes={["image/*"]}
-                path={`public/${data?.id}`}
+                path={`public/${data?.id}/profile.png`}
                 maxFileCount={1}
                 isResumable
                 autoUpload={false}
