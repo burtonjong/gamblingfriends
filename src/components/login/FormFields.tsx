@@ -6,6 +6,7 @@ import { useState } from "react";
 
 import type { Schema } from "@/../amplify/data/resource";
 import { Input, Label } from "@aws-amplify/ui-react";
+import { StorageManager } from "@aws-amplify/ui-react-storage";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
 import FormFieldButtons from "./FormFieldButtons";
@@ -25,17 +26,9 @@ export default function PersonalFormFields({ user }: { user: AuthUser }) {
   const userMutation = useMutation({
     mutationFn: async (input: FileAndUser) => {
       try {
-        await uploadData({
-          path: `public/${input.id}/profile.png`,
-          data: input.image,
-        });
-
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const { image, ...userDataWithoutFile } = input;
-
         await client.models.User.update({
           completedRegistration: true,
-          ...userDataWithoutFile,
+          ...input,
         });
       } catch (error) {
         console.error(error);
@@ -122,12 +115,12 @@ export default function PersonalFormFields({ user }: { user: AuthUser }) {
           <div className="flex w-1/2 flex-col gap-2">
             <label>
               Profile Picture
-              <input
-                type="file"
-                name="image"
-                required
-                accept="image/*"
-                onChange={(e) => updateForm(e)}
+              <StorageManager
+                acceptedFileTypes={["image/*"]}
+                path={`public/${data?.id}/profile.png`}
+                maxFileCount={1}
+                isResumable
+                autoUpload={false}
               />
             </label>
           </div>

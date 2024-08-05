@@ -26,6 +26,9 @@ export default function UserProfile() {
     },
   });
 
+  const imagePath = `public/${data?.id}/profile.png`;
+  console.log(imagePath);
+
   return (
     <div className="flex flex-col items-center justify-center gap-4">
       {isFetching ? (
@@ -36,13 +39,15 @@ export default function UserProfile() {
             <h1>
               Hi, {data?.firstName} {data?.lastName}
             </h1>
-            <div className="size-36">
-              <StorageImage
-                alt="cat"
-                path={`public/${data?.id}/profile.png`}
-                fallbackSrc="public/profile.png"
-              />
-            </div>
+            {data?.id && imagePath && (
+              <div className="size-36">
+                <StorageImage
+                  alt="profile"
+                  path={imagePath}
+                  fallbackSrc="public/profile.png"
+                />
+              </div>
+            )}
           </div>
 
           {image ? (
