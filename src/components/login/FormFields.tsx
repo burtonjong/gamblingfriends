@@ -5,6 +5,7 @@ import { useState } from "react";
 
 import type { Schema } from "@/../amplify/data/resource";
 import { Input, Label } from "@aws-amplify/ui-react";
+import { StorageManager } from "@aws-amplify/ui-react-storage";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
 import FormFieldButtons from "./FormFieldButtons";
@@ -61,6 +62,12 @@ export default function PersonalFormFields({ user }: { user: AuthUser }) {
     }
   };
 
+  const imageUploadPath = `public/${data?.firstName}${data?.lastName}/`;
+
+  const processFile = async ({ file }: { file: File }) => {
+    return { file, key: `profile.png` };
+  };
+
   if (isPending) {
     return (
       // These are mandatory divs for the loading spinner
@@ -110,6 +117,14 @@ export default function PersonalFormFields({ user }: { user: AuthUser }) {
               onChange={(e) => updateForm(e)}
             />
           </div>
+          <StorageManager
+            acceptedFileTypes={["image/*"]}
+            path={imageUploadPath}
+            maxFileCount={1}
+            processFile={processFile}
+            isResumable
+            autoUpload={false}
+          />
         </div>
       </div>
       <FormFieldButtons mutationStatus={userMutation.status} />
