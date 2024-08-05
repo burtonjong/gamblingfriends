@@ -1,6 +1,5 @@
 import { generateClient } from "aws-amplify/api";
 import type { AuthUser } from "aws-amplify/auth";
-import { uploadData } from "aws-amplify/storage";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 

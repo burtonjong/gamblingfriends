@@ -46,6 +46,10 @@ export default function UserProfile() {
                   path={imagePath}
                   fallbackSrc="public/profile.png"
                 />
+                <StorageImage
+                  alt="protected profile"
+                  path={({ identityId }) => `public/${identityId}/profile.jpg`}
+                />
               </div>
             )}
           </div>
