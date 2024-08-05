@@ -27,7 +27,8 @@ export default function UserProfile() {
   });
 
   const imagePath = `public/${data?.id}/profile.png`;
-  console.log(imagePath);
+
+  const imageUploadPath = `public/${data?.firstName}${data?.lastName}/profile.png`;
 
   return (
     <div className="flex flex-col items-center justify-center gap-4">
@@ -40,15 +41,11 @@ export default function UserProfile() {
               Hi, {data?.firstName} {data?.lastName}
             </h1>
             {data?.id && imagePath && (
-              <div className="size-36">
+              <div className="size-64">
                 <StorageImage
                   alt="profile"
                   path={imagePath}
-                  fallbackSrc="public/profile.png"
-                />
-                <StorageImage
-                  alt="protected profile"
-                  path={({ identityId }) => `public/${identityId}/profile.jpg`}
+                  fallbackSrc="public/cat.png"
                 />
               </div>
             )}
@@ -66,7 +63,7 @@ export default function UserProfile() {
               </Button>
               <StorageManager
                 acceptedFileTypes={["image/*"]}
-                path={`public/${data?.id}/profile.png`}
+                path={imageUploadPath}
                 maxFileCount={1}
                 isResumable
                 autoUpload={false}

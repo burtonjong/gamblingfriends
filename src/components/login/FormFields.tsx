@@ -5,7 +5,6 @@ import { useState } from "react";
 
 import type { Schema } from "@/../amplify/data/resource";
 import { Input, Label } from "@aws-amplify/ui-react";
-import { StorageManager } from "@aws-amplify/ui-react-storage";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
 import FormFieldButtons from "./FormFieldButtons";
@@ -110,18 +109,6 @@ export default function PersonalFormFields({ user }: { user: AuthUser }) {
               value={formState?.lastName ?? ""}
               onChange={(e) => updateForm(e)}
             />
-          </div>
-          <div className="flex w-1/2 flex-col gap-2">
-            <label>
-              Profile Picture
-              <StorageManager
-                acceptedFileTypes={["image/*"]}
-                path={`public/${data?.id}/profile.png`}
-                maxFileCount={1}
-                isResumable
-                autoUpload={false}
-              />
-            </label>
           </div>
         </div>
       </div>
